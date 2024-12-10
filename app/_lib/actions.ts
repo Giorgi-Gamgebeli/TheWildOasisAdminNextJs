@@ -1,8 +1,9 @@
 "use server";
-import { redirect } from "next/navigation";
+
 import supabase, { supabaseUrl } from "./supabase";
-import { signIn } from "./auth";
-import { revalidatePath, revalidateTag } from "next/cache";
+import { signIn } from "@/auth";
+import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
+import { AuthError } from "next-auth";
 import { isRedirectError } from "next/dist/client/components/redirect";
 
 export async function editCabin(formData: FormData) {}
@@ -26,37 +27,29 @@ export async function signup(formData: FormData) {
 }
 
 export async function login(formData: FormData) {
-  try {
-    const email = formData.get("email") as string;
-    const password = formData.get("password") as string;
+  const email = formData.get("email") as string;
+  const password = formData.get("password") as string;
 
-    const res = await signIn("credentials", {
+  try {
+    await signIn("credentials", {
       email,
       password,
-      redirectTo: "/authenticated/dashboard",
+      redirectTo: DEFAULT_LOGIN_REDIRECT,
     });
-
-    if (!res) throw new Error("Authentication failed");
-
-    // revalidatePath("/", "layout");
-
-    // redirect("/authenticated/dashboard");
   } catch (error) {
-    if (isRedirectError(error)) {
-      throw error;
-    }
-    console.error(error);
+    if (isRedirectError(error)) throw error;
 
-    return { error: error?.cause?.err?.message };
-    // if (
-    //   error instanceof Error && error.cause instanceof Error &&
-    //   error.cause.err instanceof InvalidLoginError
-    // ) {
-    //   return { ok: false, error: "Incorrect username or password" };
-    // } else {
-    //   return { ok: false, error: "Failed to authenticate" };
-    // }
-  } finally {
+    if (error instanceof AuthError) {
+      switch (error.type) {
+        case "CredentialsSignin":
+          return { error: "Invalid credentials" };
+        default:
+          return { error: "Something went wrong!" };
+      }
+    }
+
+    console.error(error);
+    return { error: "Something went REALLY wrong!" };
   }
 }
 
