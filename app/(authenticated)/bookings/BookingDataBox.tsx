@@ -11,8 +11,35 @@ import { Flag } from "../../_components/Flag";
 
 import { formatDistanceFromNow, formatCurrency } from "../../_utils/helpers";
 
-// A purely presentational component
-function BookingDataBox({ booking }) {
+type BookingDataBoxProps = {
+  booking: {
+    created_at: string;
+    startDate: string;
+    endDate: string;
+    numNights: number;
+    numGuests: number;
+    cabinPrice: number;
+    totalPrice: number;
+    status: string;
+    hasBreakfast: boolean;
+    isPaid: boolean;
+    observations?: string;
+    extrasPrice: number;
+
+    User: {
+      fullName: string;
+      email: string;
+      country: string;
+      countryFlag: string;
+      nationalID: string;
+    };
+    Cabins: {
+      name: string;
+    };
+  };
+};
+
+function BookingDataBox({ booking }: BookingDataBoxProps) {
   const {
     created_at,
     startDate,
@@ -25,8 +52,8 @@ function BookingDataBox({ booking }) {
     hasBreakfast,
     observations,
     isPaid,
-    guests: { fullName: guestName, email, country, countryFlag, nationalID },
-    cabins: { name: cabinName },
+    User: { fullName: guestName, email, country, countryFlag, nationalID },
+    Cabins: { name: cabinName },
   } = booking;
 
   return (

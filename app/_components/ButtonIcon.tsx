@@ -9,7 +9,7 @@ function ButtonIcon({ children, onClick, disabled }: ButtonIconProps) {
     <button
       disabled={disabled}
       onClick={onClick}
-      className="bg-none border-none p-[0.6rem] rounded-md hover:bg-gray-100 hover:dark:bg-gray-800 text-[2.2rem] text-indigo-600"
+      className="rounded-md border-none bg-none p-[0.6rem] text-[2.2rem] text-indigo-600 hover:bg-gray-100 disabled:cursor-not-allowed hover:dark:bg-gray-800"
     >
       {children}
     </button>

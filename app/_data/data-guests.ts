@@ -1,11 +1,7 @@
-"use client";
-
-// Search for: 'jo', 'fa', 'mar', 'emm', 'ah'
-
-export const guests = [
+export const users = [
   {
-    // id: 1000,
     fullName: "Jonas Schmedtmann",
+    role: "GUEST",
     email: "hello@jonas.io",
     nationality: "Portugal",
     nationalID: "3525436345",
@@ -13,6 +9,7 @@ export const guests = [
   },
   {
     fullName: "Jonathan Smith",
+    role: "GUEST",
     email: "johnsmith@test.eu",
     nationality: "Great Britain",
     nationalID: "4534593454",
@@ -20,6 +17,7 @@ export const guests = [
   },
   {
     fullName: "Jonatan Johansson",
+    role: "GUEST",
     email: "jonatan@example.com",
     nationality: "Finland",
     nationalID: "9374074454",
@@ -27,6 +25,7 @@ export const guests = [
   },
   {
     fullName: "Jonas Mueller",
+    role: "GUEST",
     email: "jonas@example.eu",
     nationality: "Germany",
     nationalID: "1233212288",
@@ -34,6 +33,7 @@ export const guests = [
   },
   {
     fullName: "Jonas Anderson",
+    role: "GUEST",
     email: "anderson@example.com",
     nationality: "Bolivia (Plurinational State of)",
     nationalID: "0988520146",
@@ -41,6 +41,7 @@ export const guests = [
   },
   {
     fullName: "Jonathan Williams",
+    role: "GUEST",
     email: "jowi@gmail.com",
     nationality: "United States of America",
     nationalID: "633678543",
@@ -50,6 +51,7 @@ export const guests = [
   // GPT
   {
     fullName: "Emma Watson",
+    role: "GUEST",
     email: "emma@gmail.com",
     nationality: "United Kingdom",
     nationalID: "1234578901",
@@ -57,6 +59,7 @@ export const guests = [
   },
   {
     fullName: "Mohammed Ali",
+    role: "GUEST",
     email: "mohammedali@yahoo.com",
     nationality: "Egypt",
     nationalID: "987543210",
@@ -64,6 +67,7 @@ export const guests = [
   },
   {
     fullName: "Maria Rodriguez",
+    role: "GUEST",
     email: "maria@gmail.com",
     nationality: "Spain",
     nationalID: "1098765321",
@@ -71,6 +75,7 @@ export const guests = [
   },
   {
     fullName: "Li Mei",
+    role: "GUEST",
     email: "li.mei@hotmail.com",
     nationality: "China",
     nationalID: "102934756",
@@ -78,6 +83,7 @@ export const guests = [
   },
   {
     fullName: "Khadija Ahmed",
+    role: "GUEST",
     email: "khadija@gmail.com",
     nationality: "Sudan",
     nationalID: "1023457890",
@@ -85,6 +91,7 @@ export const guests = [
   },
   {
     fullName: "Gabriel Silva",
+    role: "GUEST",
     email: "gabriel@gmail.com",
     nationality: "Brazil",
     nationalID: "109283465",
@@ -92,6 +99,7 @@ export const guests = [
   },
   {
     fullName: "Maria Gomez",
+    role: "GUEST",
     email: "maria@example.com",
     nationality: "Mexico",
     nationalID: "108765421",
@@ -99,6 +107,7 @@ export const guests = [
   },
   {
     fullName: "Ahmed Hassan",
+    role: "GUEST",
     email: "ahmed@gmail.com",
     nationality: "Egypt",
     nationalID: "1077777777",
@@ -106,6 +115,7 @@ export const guests = [
   },
   {
     fullName: "John Doe",
+    role: "GUEST",
     email: "johndoe@gmail.com",
     nationality: "United States",
     nationalID: "3245908744",
@@ -113,6 +123,7 @@ export const guests = [
   },
   {
     fullName: "Fatima Ahmed",
+    role: "GUEST",
     email: "fatima@example.com",
     nationality: "Pakistan",
     nationalID: "1089999363",
@@ -120,6 +131,7 @@ export const guests = [
   },
   {
     fullName: "David Smith",
+    role: "GUEST",
     email: "david@gmail.com",
     nationality: "Australia",
     nationalID: "44450960283",
@@ -127,6 +139,7 @@ export const guests = [
   },
   {
     fullName: "Marie Dupont",
+    role: "GUEST",
     email: "marie@gmail.com",
     nationality: "France",
     nationalID: "06934233728",
@@ -134,6 +147,7 @@ export const guests = [
   },
   {
     fullName: "Ramesh Patel",
+    role: "GUEST",
     email: "ramesh@gmail.com",
     nationality: "India",
     nationalID: "9875412303",
@@ -141,6 +155,7 @@ export const guests = [
   },
   {
     fullName: "Fatimah Al-Sayed",
+    role: "GUEST",
     email: "fatimah@gmail.com",
     nationality: "Kuwait",
     nationalID: "0123456789",
@@ -148,6 +163,7 @@ export const guests = [
   },
   {
     fullName: "Nina Williams",
+    role: "GUEST",
     email: "nina@hotmail.com",
     nationality: "South Africa",
     nationalID: "2345678901",
@@ -155,6 +171,7 @@ export const guests = [
   },
   {
     fullName: "Taro Tanaka",
+    role: "GUEST",
     email: "taro@gmail.com",
     nationality: "Japan",
     nationalID: "3456789012",
@@ -162,6 +179,7 @@ export const guests = [
   },
   {
     fullName: "Abdul Rahman",
+    role: "GUEST",
     email: "abdul@gmail.com",
     nationality: "Saudi Arabia",
     nationalID: "4567890123",
@@ -169,6 +187,7 @@ export const guests = [
   },
   {
     fullName: "Julie Nguyen",
+    role: "GUEST",
     email: "julie@gmail.com",
     nationality: "Vietnam",
     nationalID: "5678901234",
@@ -176,6 +195,7 @@ export const guests = [
   },
   {
     fullName: "Sara Lee",
+    role: "GUEST",
     email: "sara@gmail.com",
     nationality: "South Korea",
     nationalID: "6789012345",
@@ -183,6 +203,7 @@ export const guests = [
   },
   {
     fullName: "Carlos Gomez",
+    role: "GUEST",
     email: "carlos@yahoo.com",
     nationality: "Colombia",
     nationalID: "7890123456",
@@ -190,6 +211,7 @@ export const guests = [
   },
   {
     fullName: "Emma Brown",
+    role: "GUEST",
     email: "emma@gmail.com",
     nationality: "Canada",
     nationalID: "8901234567",
@@ -197,6 +219,7 @@ export const guests = [
   },
   {
     fullName: "Juan Hernandez",
+    role: "GUEST",
     email: "juan@yahoo.com",
     nationality: "Argentina",
     nationalID: "4343433333",
@@ -204,6 +227,7 @@ export const guests = [
   },
   {
     fullName: "Ibrahim Ahmed",
+    role: "GUEST",
     email: "ibrahim@yahoo.com",
     nationality: "Nigeria",
     nationalID: "2345678009",
@@ -211,6 +235,7 @@ export const guests = [
   },
   {
     fullName: "Mei Chen",
+    role: "GUEST",
     email: "mei@gmail.com",
     nationality: "Taiwan",
     nationalID: "3456117890",

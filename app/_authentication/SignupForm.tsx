@@ -1,96 +1,71 @@
 "use client";
 
-import { useForm } from "react-hook-form";
 import Button from "../_components/Button";
 import Form from "../_components/Form";
 import FormRow from "../_components/FormRow";
 import Input from "../_components/Input";
-import { useSignup } from "./useSignup";
-
-// Email regex: /\S+@\S+\.\S+/
+import { useFormState } from "react-dom";
+import toast from "react-hot-toast";
+import { signup } from "../_lib/databaseActions";
 
 function SignupForm() {
-  const { signup, isLoading } = useSignup();
-  const {
-    register,
-    formState: { errors },
-    getValues,
-    handleSubmit,
-    reset,
-  } = useForm();
+  const initialErrorState = {
+    zodErrors: {
+      email: undefined,
+      fullName: undefined,
+      password: undefined,
+      passwordConfirm: undefined,
+    },
+  };
 
-  function onSubmit({ fullName, email, password }) {
-    signup({ fullName, email, password }, { onSettled: reset });
-  }
+  const [errors, action] = useFormState(
+    async (_: void | object, formData: FormData) => {
+      const res = await signup(formData);
+      await new Promise((res) => setTimeout(res, 5000));
+
+      if (res?.zodErrors) {
+        return { zodErrors: res.zodErrors };
+      }
+
+      if (res?.error) {
+        toast.error(res.error);
+        return;
+      }
+
+      toast.success("Account created succesfully");
+    },
+    initialErrorState,
+  );
 
   return (
-    <Form onSubmit={handleSubmit(onSubmit)}>
-      <FormRow label="Full name" error={errors?.fullName?.message}>
-        <Input
-          type="text"
-          id="fullName"
-          disabled={isLoading}
-          {...register("fullName", { required: "This field is required" })}
-        />
+    <Form action={action}>
+      <FormRow label="Full name" error={errors?.zodErrors?.fullName?.at(0)}>
+        <Input type="text" id="fullName" />
       </FormRow>
 
-      <FormRow label="Email address" error={errors?.email?.message}>
-        <Input
-          type="email"
-          id="email"
-          disabled={isLoading}
-          {...register("email", {
-            required: "This field is required",
-            pattern: {
-              value: /\S+@\S+\.\S+/,
-              message: "Please provide a valid email address",
-            },
-          })}
-        />
+      <FormRow label="Email address" error={errors?.zodErrors?.email?.at(0)}>
+        <Input type="email" id="email" />
       </FormRow>
 
       <FormRow
         label="Password (min 8 characters)"
-        error={errors?.password?.message}
+        error={errors?.zodErrors?.password?.at(0)}
       >
-        <Input
-          type="password"
-          id="password"
-          disabled={isLoading}
-          {...register("password", {
-            required: "This field is required",
-            minLength: {
-              value: 8,
-              message: "Password needs a minimum of 8 characters",
-            },
-          })}
-        />
+        <Input type="password" id="password" />
       </FormRow>
 
-      <FormRow label="Repeat password" error={errors?.passwordConfirm?.message}>
-        <Input
-          type="password"
-          id="passwordConfirm"
-          disabled={isLoading}
-          {...register("passwordConfirm", {
-            required: "This field is required",
-            validate: (value) =>
-              value === getValues().password || "Passwords need to match",
-          })}
-        />
+      <FormRow
+        label="Repeat password"
+        error={errors?.zodErrors?.passwordConfirm?.at(0)}
+      >
+        <Input type="password" id="passwordConfirm" />
       </FormRow>
 
       <FormRow>
-        {/* type is an HTML attribute! */}
-        <Button
-          variation="secondary"
-          type="reset"
-          disabled={isLoading}
-          onClick={reset}
-        >
+        <Button variation="secondary" type="reset">
           Cancel
         </Button>
-        <Button disabled={isLoading}>Create new user</Button>
+        <Button>Create new user</Button>
       </FormRow>
     </Form>
   );

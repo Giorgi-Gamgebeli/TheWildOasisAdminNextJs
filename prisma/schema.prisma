@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
@@ -10,20 +7,31 @@ generator client {
   provider = "prisma-client-js"
 }
 
+enum UserRole {
+  ADMIN
+  GUEST
+}
+
 model User {
   id            String          @id @default(cuid())
   name          String?
   email         String          @unique
   password      String?
-  emailVerified DateTime?
+  role          UserRole        @default(GUEST)
   image         String?
+  emailVerified DateTime?
+  avatar        Bytes?
+  nationalID    String?
+  nationality   String?
+  countryFlag   String?
   accounts      Account[]
   sessions      Session[]
   // Optional for WebAuthn support
   Authenticator Authenticator[]
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+  Bookings  Reservations[]
 }
 
 model Account {
@@ -79,4 +87,57 @@ model Authenticator {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@id([userId, credentialID])
+}
+
+model Cabins {
+  id           Int            @id @default(autoincrement())
+  createdAt    DateTime       @default(now())
+  name         String
+  maxCapacity  Int
+  regularPrice Float
+  discount     Float
+  description  String
+  image        String
+  Bookings     Reservations[]
+}
+
+// model Guests {
+//   id          Int      @id @default(autoincrement())
+//   createdAt   DateTime @default(now())
+//   fullName    String
+//   email       String   @unique
+//   nationalID  String
+//   nationality String
+//   countryFlag String
+// }
+
+model Reservations {
+  id           Int      @id @default(autoincrement())
+  createdAt    DateTime @default(now())
+  startDate    DateTime
+  endDate      DateTime
+  numNights    Int
+  numGuests    Int
+  cabinPrice   Int
+  totalPrice   Int
+  status       String
+  hasBreakfast Boolean
+  isPaid       Boolean
+  observations String?
+  extrasPrice  Int
+
+  cabinId Int
+  userId  String
+
+  cabin Cabins @relation(fields: [cabinId], references: [id], onDelete: Cascade)
+  user  User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Settings {
+  id                   Int      @id @default(autoincrement())
+  createdAt            DateTime @default(now())
+  minimumBookingLength Int
+  maxBookingLength     Int
+  maxGuestsPerBooking  Int
+  breakFastPrice       Int
 }

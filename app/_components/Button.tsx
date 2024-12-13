@@ -1,19 +1,26 @@
+"use client";
+
+import { useFormStatus } from "react-dom";
 import { tw } from "../_utils/tw";
 
 type ButtonProps = {
   size?: "small" | "medium" | "large";
   variation?: "primary" | "secondary" | "danger";
   children: React.ReactNode;
-  disabled?: boolean;
   onClick?: () => void;
+  type?: "submit" | "reset" | "button";
+  pendingStatus?: React.ReactNode;
+  disabled?: boolean;
 };
 
 function Button({
   size = "medium",
   variation = "primary",
-  disabled = false,
   children,
   onClick,
+  type,
+  disabled,
+  pendingStatus,
 }: ButtonProps) {
   const sizeStyles = {
     small: tw(
@@ -31,13 +38,16 @@ function Button({
     danger: tw(`border-none bg-red-700 text-red-100 hover:bg-red-800`),
   };
 
+  const { pending } = useFormStatus();
+
   return (
     <button
-      disabled={disabled}
+      disabled={pending || disabled}
       onClick={onClick}
-      className={`rounded-md shadow-[0_0_0_rgba(0,0,0,0.04)] dark:shadow-[0_0_0_rgba(0,0,0,0.4)] ${sizeStyles[size]} ${variationsStyles[variation]}`}
+      type={type}
+      className={`rounded-md shadow-[0_0_0_rgba(0,0,0,0.04)] disabled:cursor-not-allowed dark:shadow-[0_0_0_rgba(0,0,0,0.4)] ${sizeStyles[size]} ${variationsStyles[variation]} `}
     >
-      {children}
+      {pending && pendingStatus ? pendingStatus : children}
     </button>
   );
 }

@@ -2,15 +2,23 @@
 
 import { HiArrowRightOnRectangle } from "react-icons/hi2";
 import ButtonIcon from "../_components/ButtonIcon";
-import { useLogout } from "./useLogout";
 import SpinnerMini from "../_components/SpinnerMini";
+import { useTransition } from "react";
+import { signOut } from "next-auth/react";
 
 function Logout() {
-  const { logout, isLoading } = useLogout();
+  const [isPending, startTransition] = useTransition();
 
   return (
-    <ButtonIcon disabled={isLoading} onClick={() => logout()}>
-      {!isLoading ? <HiArrowRightOnRectangle /> : <SpinnerMini />}
+    <ButtonIcon
+      disabled={isPending}
+      onClick={() => {
+        startTransition(() => {
+          signOut();
+        });
+      }}
+    >
+      {!isPending ? <HiArrowRightOnRectangle /> : <SpinnerMini />}
     </ButtonIcon>
   );
 }

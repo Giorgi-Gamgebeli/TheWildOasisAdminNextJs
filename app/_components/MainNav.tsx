@@ -12,27 +12,27 @@ function MainNav() {
     <nav>
       <ul className="flex flex-col gap-[0.8rem]">
         <li>
-          <NavLink text="Home" href="/authenticated/dashboard">
+          <NavLink text="Home" href="/dashboard">
             <HiOutlineHome />
           </NavLink>
         </li>
         <li>
-          <NavLink text="Bookings" href="/authenticated/bookings">
+          <NavLink text="Bookings" href="/bookings">
             <HiOutlineCalendarDays />
           </NavLink>
         </li>
         <li>
-          <NavLink text="Cabins" href="/authenticated/cabins">
+          <NavLink text="Cabins" href="/cabins">
             <HiOutlineHomeModern />
           </NavLink>
         </li>
         <li>
-          <NavLink text="Users" href="/authenticated/users">
+          <NavLink text="Users" href="/users">
             <HiOutlineUsers />
           </NavLink>
         </li>
         <li>
-          <NavLink text="Settings" href="/authenticated/settings">
+          <NavLink text="Settings" href="/settings">
             <HiOutlineCog6Tooth />
           </NavLink>
         </li>

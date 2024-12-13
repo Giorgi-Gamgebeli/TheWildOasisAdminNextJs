@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext } from "react";
-import { BookingRowProps } from "../authenticated/bookings/BookingRow";
+import { BookingRowProps } from "../(authenticated)/bookings/BookingRow";
 
 type TableContextTypes = {
   columns: string;

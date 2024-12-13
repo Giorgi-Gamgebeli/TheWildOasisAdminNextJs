@@ -1,81 +1,83 @@
 "use client";
 
-import { useState } from "react";
-
 import Button from "../_components/Button";
 import FileInput from "../_components/FileInput";
 import Form from "../_components/Form";
 import FormRow from "../_components/FormRow";
 import Input from "../_components/Input";
 
-import { useUser } from "./useUser";
-import { useUpdateUser } from "./useUpdateUser";
+import { useFormState } from "react-dom";
+import { updateUser } from "../_lib/databaseActions";
+import toast from "react-hot-toast";
+import { useSession } from "next-auth/react";
+import Spinner from "../_components/Spinner";
 
 function UpdateUserDataForm() {
-  // We don't need the loading state, and can immediately use the user data, because we know that it has already been loaded at this point
-  const {
-    user: {
-      email,
-      user_metadata: { fullName: currentFullName },
+  const initialErrorState = {
+    zodErrors: {
+      password: undefined,
+      passwordConfirm: undefined,
     },
-  } = useUser();
+  };
 
-  const { updateUser, isUpdating } = useUpdateUser();
+  const [errors, action] = useFormState(
+    async (_: void | object, formData: FormData) => {
+      const res = await updateUser(formData);
 
-  const [fullName, setFullName] = useState(currentFullName);
-  const [avatar, setAvatar] = useState(null);
+      if (res?.zodErrors) return { zodErrors: res.zodErrors };
 
-  function handleSubmit(e) {
-    e.preventDefault();
-    if (!fullName) return;
-    updateUser(
-      { fullName, avatar },
-      {
-        onSuccess: () => {
-          setAvatar(null);
-          e.target.reset();
-        },
+      if (res?.error) {
+        toast.error(res.error);
+        return;
       }
-    );
-  }
 
-  function handleCancel() {
-    setFullName(currentFullName);
-    setAvatar(null);
-  }
+      toast.success("Account successfully updated!");
+    },
+    initialErrorState,
+  );
+
+  const session = useSession();
+
+  if (!session.data) return <Spinner />;
 
   return (
-    <Form onSubmit={handleSubmit}>
+    <Form action={action}>
       <FormRow label="Email address">
-        <Input value={email} disabled />
+        <Input defaultValue={session.data?.user.email} disabled />
       </FormRow>
-      <FormRow label="Full name">
+      <FormRow label="Full name" error={errors?.zodErrors?.fullName?.at(0)}>
         <Input
           type="text"
-          value={fullName}
-          onChange={(e) => setFullName(e.target.value)}
+          defaultValue={session.data?.user.name}
           id="fullName"
-          disabled={isUpdating}
+        />
+      </FormRow>
+      <FormRow
+        label="New password (min 8 chars)"
+        error={errors?.zodErrors?.password?.at(0)}
+      >
+        <Input type="password" id="password" autoComplete="current-password" />
+      </FormRow>
+
+      <FormRow
+        label="Confirm password"
+        error={errors?.zodErrors?.passwordConfirm?.at(0)}
+      >
+        <Input
+          type="password"
+          autoComplete="new-password"
+          id="passwordConfirm"
         />
       </FormRow>
       <FormRow label="Avatar image">
-        <FileInput
-          id="avatar"
-          accept="image/*"
-          onChange={(e) => setAvatar(e.target.files[0])}
-          disabled={isUpdating}
-        />
+        <FileInput id="avatar" accept="image/*" />
       </FormRow>
+      <Input hidden id="userId" defaultValue={session.data.user.id} />
       <FormRow>
-        <Button
-          type="reset"
-          variation="secondary"
-          disabled={isUpdating}
-          onClick={handleCancel}
-        >
+        <Button type="reset" variation="secondary">
           Cancel
         </Button>
-        <Button disabled={isUpdating}>Update account</Button>
+        <Button>Update account</Button>
       </FormRow>
     </Form>
   );

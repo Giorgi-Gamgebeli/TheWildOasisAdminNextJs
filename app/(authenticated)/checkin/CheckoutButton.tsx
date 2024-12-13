@@ -3,7 +3,7 @@
 import Button from "../../_components/Button";
 import { useCheckout } from "./useCheckout";
 
-function CheckoutButton({ bookingId }) {
+function CheckoutButton({ bookingId }: { bookingId: number }) {
   const { checkout, isCheckingOut } = useCheckout();
 
   return (
