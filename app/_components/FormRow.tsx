@@ -22,7 +22,9 @@ function FormRow({ label, error, children }: FormRowProps) {
         </label>
       )}
       {children}
-      {error && <span className="text-[1.4rem] text-red-700">{error}</span>}
+      {error && (
+        <span className="ml-10 text-[1.4rem] text-red-700">{error}</span>
+      )}
     </div>
   );
 }

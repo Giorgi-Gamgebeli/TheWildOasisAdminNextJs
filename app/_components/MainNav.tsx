@@ -17,7 +17,7 @@ function MainNav() {
           </NavLink>
         </li>
         <li>
-          <NavLink text="Bookings" href="/bookings">
+          <NavLink text="Reservations" href="/reservations">
             <HiOutlineCalendarDays />
           </NavLink>
         </li>

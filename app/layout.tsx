@@ -3,6 +3,7 @@ import "./globals.css";
 
 import { Poppins, Sono } from "next/font/google";
 import ClientProviders from "./_utils/ClientProviders";
+import { DarkModeProvider } from "./_context/DarkModeContext";
 
 const poppins = Poppins({
   weight: ["300", "400", "500", "600", "700", "800", "900"],
@@ -33,7 +34,9 @@ export default function RootLayout({
       <body
         className={`${poppins.className} ${sono.variable} text-[1.4rem] text-gray-700 dark:text-gray-200`}
       >
-        <ClientProviders>{children}</ClientProviders>
+        <DarkModeProvider>
+          <ClientProviders>{children}</ClientProviders>
+        </DarkModeProvider>
       </body>
     </html>
   );

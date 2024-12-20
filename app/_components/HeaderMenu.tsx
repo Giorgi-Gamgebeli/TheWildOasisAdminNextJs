@@ -1,4 +1,4 @@
-import Logout from "../_authentication/Logout";
+import Logout from "./Logout";
 import { HiOutlineUser } from "react-icons/hi2";
 import DarkModeToggle from "./DarkModeToggle";
 import Link from "next/link";

@@ -1,14 +1,10 @@
 "use server";
 
-import supabase from "./supabase";
 import { signIn } from "@/auth";
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 import { AuthError } from "next-auth";
 import { isRedirectError } from "next/dist/client/components/redirect";
 import { LoginSchema } from "../_schemas";
-
-export async function editCabin(formData: FormData) {}
-export async function createCabin(formData: FormData) {}
 
 export async function login(formData: FormData) {
   const formDataObj = {
@@ -42,15 +38,4 @@ export async function login(formData: FormData) {
     console.error(error);
     return { error: "Something went REALLY wrong!" };
   }
-}
-
-export async function getCurrentUser() {
-  const { data: session } = await supabase.auth.getSession();
-  if (!session.session) return null;
-
-  const { data, error } = await supabase.auth.getUser();
-
-  if (error) throw new Error(error.message);
-
-  return data?.user;
 }

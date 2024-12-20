@@ -1,7 +1,7 @@
 type CheckboxProps = {
   checked: boolean;
   onChange: () => void;
-  disabled: boolean;
+  disabled?: boolean;
   id: string;
   children: React.ReactNode;
 };
@@ -21,11 +21,11 @@ function Checkbox({
         checked={checked}
         onChange={onChange}
         disabled={disabled}
-        className="h-[2.4rem] w-[2.4rem] outline-offset-2 origin-[0] accent-indigo-600 "
+        className="h-[2.4rem] w-[2.4rem] origin-[0] accent-indigo-600 outline-offset-2"
       />
       <label
         htmlFor={!disabled ? id : ""}
-        className="flex-1 flex items-center gap-[0.8]"
+        className="flex flex-1 items-center gap-[0.8]"
       >
         {children}
       </label>

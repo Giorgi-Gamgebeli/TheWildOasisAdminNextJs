@@ -1,7 +1,6 @@
 "use client";
 
 import { createContext, useContext } from "react";
-import { BookingRowProps } from "../(authenticated)/bookings/BookingRow";
 
 type TableContextTypes = {
   columns: string;
@@ -36,14 +35,19 @@ function useTableContext() {
   return context;
 }
 
-function Header({ children }: { children: React.ReactNode }) {
+type HeaderProps = {
+  role?: string;
+  children: React.ReactNode;
+};
+
+function Header({ children, role }: HeaderProps) {
   const { columns } = useTableContext();
 
   return (
     <header
       className="grid items-center gap-y-[2.4rem] border-b border-gray-100 bg-gray-50 px-[2.4rem] py-[1.6rem] text-[1.4rem] font-semibold uppercase tracking-[0.4px] text-gray-600 transition-none dark:border-gray-800 dark:bg-gray-900 dark:text-gray-300"
       style={{ gridTemplateColumns: columns }}
-      role="row"
+      role={role || "row"}
     >
       {children}
     </header>
@@ -54,7 +58,7 @@ function Row({ children }: { children: React.ReactNode }) {
   const { columns } = useTableContext();
   return (
     <div
-      className="col grid items-center gap-y-[2.4rem] border-b border-gray-100 bg-white px-[2.4rem] py-[1.2rem] text-[1.4rem] text-gray-600 transition-none last:border-none dark:border-gray-800 dark:bg-gray-0 dark:text-gray-300"
+      className="col grid items-center gap-x-[2.4rem] border-b border-gray-100 bg-white px-[2.4rem] py-[1.2rem] text-[1.4rem] text-gray-600 transition-none last:border-none dark:border-gray-800 dark:bg-gray-0 dark:text-gray-300"
       style={{ gridTemplateColumns: columns }}
       role="row"
     >
@@ -63,12 +67,12 @@ function Row({ children }: { children: React.ReactNode }) {
   );
 }
 
-type BodyProps = {
-  data: BookingRowProps["booking"][];
-  render: (booking: BookingRowProps["booking"]) => JSX.Element;
+type BodyProps<T> = {
+  data: T[];
+  render: (reservationOrCabin: T) => JSX.Element;
 };
 
-function Body({ data, render }: BodyProps) {
+function Body<T>({ data, render }: BodyProps<T>) {
   if (!data.length)
     return (
       <p className="m-[2.4rem] text-center text-[1.6rem] font-medium">

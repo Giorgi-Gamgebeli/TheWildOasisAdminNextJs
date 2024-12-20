@@ -3,7 +3,6 @@ import { NextResponse } from "next/server";
 
 export async function GET() {
   const session = await auth();
-  console.log(session);
 
   if (!session)
     return new NextResponse(JSON.stringify({ error: "unauthrorized" }), {

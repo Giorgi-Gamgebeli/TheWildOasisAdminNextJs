@@ -20,7 +20,6 @@ model User {
   role          UserRole        @default(GUEST)
   image         String?
   emailVerified DateTime?
-  avatar        Bytes?
   nationalID    String?
   nationality   String?
   countryFlag   String?
@@ -29,9 +28,9 @@ model User {
   // Optional for WebAuthn support
   Authenticator Authenticator[]
 
-  createdAt DateTime       @default(now())
-  updatedAt DateTime       @updatedAt
-  Bookings  Reservations[]
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  reservations Reservations[]
 }
 
 model Account {
@@ -98,33 +97,23 @@ model Cabins {
   discount     Float
   description  String
   image        String
-  Bookings     Reservations[]
+  reservations Reservations[]
 }
-
-// model Guests {
-//   id          Int      @id @default(autoincrement())
-//   createdAt   DateTime @default(now())
-//   fullName    String
-//   email       String   @unique
-//   nationalID  String
-//   nationality String
-//   countryFlag String
-// }
 
 model Reservations {
   id           Int      @id @default(autoincrement())
   createdAt    DateTime @default(now())
   startDate    DateTime
   endDate      DateTime
-  numNights    Int
+  numNights    Int?
   numGuests    Int
-  cabinPrice   Int
-  totalPrice   Int
-  status       String
+  cabinPrice   Int?
+  totalPrice   Int?
+  status       String?
   hasBreakfast Boolean
   isPaid       Boolean
   observations String?
-  extrasPrice  Int
+  extrasPrice  Int?
 
   cabinId Int
   userId  String
@@ -134,10 +123,10 @@ model Reservations {
 }
 
 model Settings {
-  id                   Int      @id @default(autoincrement())
-  createdAt            DateTime @default(now())
-  minimumBookingLength Int
-  maxBookingLength     Int
-  maxGuestsPerBooking  Int
-  breakFastPrice       Int
+  id                       Int      @id @default(autoincrement())
+  createdAt                DateTime @default(now())
+  minimumReservationLength Int
+  maxReservationLength     Int
+  maxGuestsPerReservation  Int
+  breakFastPrice           Int
 }

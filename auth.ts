@@ -2,7 +2,7 @@ import NextAuth from "next-auth";
 import prisma from "./app/_lib/db";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import authConfig from "./auth.config";
-import { getUserById } from "./app/_lib/databaseActions";
+import { getUserById } from "./app/_lib/authActions";
 import { UserRole } from "@prisma/client";
 
 export const {
@@ -30,6 +30,7 @@ export const {
       if (!existingUser) return token;
 
       token.role = existingUser.role;
+      token.image = existingUser.image;
 
       return token;
     },
@@ -41,6 +42,7 @@ export const {
 
       if (token.role && session.user) {
         session.user.role = token.role as UserRole;
+        session.user.image = token.image as string;
       }
 
       return session;

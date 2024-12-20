@@ -1,6 +1,10 @@
-export const users = [
+import { Prisma } from "@prisma/client";
+import { createId } from "@paralleldrive/cuid2";
+
+export const guestUsers: Prisma.UserCreateManyInput[] = [
   {
-    fullName: "Jonas Schmedtmann",
+    id: createId(),
+    name: "Jonas Schmedtmann",
     role: "GUEST",
     email: "hello@jonas.io",
     nationality: "Portugal",
@@ -8,7 +12,8 @@ export const users = [
     countryFlag: "https://flagcdn.com/pt.svg",
   },
   {
-    fullName: "Jonathan Smith",
+    id: createId(),
+    name: "Jonathan Smith",
     role: "GUEST",
     email: "johnsmith@test.eu",
     nationality: "Great Britain",
@@ -16,7 +21,8 @@ export const users = [
     countryFlag: "https://flagcdn.com/gb.svg",
   },
   {
-    fullName: "Jonatan Johansson",
+    id: createId(),
+    name: "Jonatan Johansson",
     role: "GUEST",
     email: "jonatan@example.com",
     nationality: "Finland",
@@ -24,7 +30,8 @@ export const users = [
     countryFlag: "https://flagcdn.com/fi.svg",
   },
   {
-    fullName: "Jonas Mueller",
+    id: createId(),
+    name: "Jonas Mueller",
     role: "GUEST",
     email: "jonas@example.eu",
     nationality: "Germany",
@@ -32,7 +39,8 @@ export const users = [
     countryFlag: "https://flagcdn.com/de.svg",
   },
   {
-    fullName: "Jonas Anderson",
+    id: createId(),
+    name: "Jonas Anderson",
     role: "GUEST",
     email: "anderson@example.com",
     nationality: "Bolivia (Plurinational State of)",
@@ -40,7 +48,8 @@ export const users = [
     countryFlag: "https://flagcdn.com/bo.svg",
   },
   {
-    fullName: "Jonathan Williams",
+    id: createId(),
+    name: "Jonathan Williams",
     role: "GUEST",
     email: "jowi@gmail.com",
     nationality: "United States of America",
@@ -50,15 +59,17 @@ export const users = [
 
   // GPT
   {
-    fullName: "Emma Watson",
+    id: createId(),
+    name: "Emma Watson",
     role: "GUEST",
-    email: "emma@gmail.com",
+    email: "emma2@gmail.com",
     nationality: "United Kingdom",
     nationalID: "1234578901",
     countryFlag: "https://flagcdn.com/gb.svg",
   },
   {
-    fullName: "Mohammed Ali",
+    id: createId(),
+    name: "Mohammed Ali",
     role: "GUEST",
     email: "mohammedali@yahoo.com",
     nationality: "Egypt",
@@ -66,15 +77,17 @@ export const users = [
     countryFlag: "https://flagcdn.com/eg.svg",
   },
   {
-    fullName: "Maria Rodriguez",
+    id: createId(),
+    name: "Maria Rodriguez",
     role: "GUEST",
-    email: "maria@gmail.com",
+    email: "maria2@gmail.com",
     nationality: "Spain",
     nationalID: "1098765321",
     countryFlag: "https://flagcdn.com/es.svg",
   },
   {
-    fullName: "Li Mei",
+    id: createId(),
+    name: "Li Mei",
     role: "GUEST",
     email: "li.mei@hotmail.com",
     nationality: "China",
@@ -82,7 +95,8 @@ export const users = [
     countryFlag: "https://flagcdn.com/cn.svg",
   },
   {
-    fullName: "Khadija Ahmed",
+    id: createId(),
+    name: "Khadija Ahmed",
     role: "GUEST",
     email: "khadija@gmail.com",
     nationality: "Sudan",
@@ -90,7 +104,8 @@ export const users = [
     countryFlag: "https://flagcdn.com/sd.svg",
   },
   {
-    fullName: "Gabriel Silva",
+    id: createId(),
+    name: "Gabriel Silva",
     role: "GUEST",
     email: "gabriel@gmail.com",
     nationality: "Brazil",
@@ -98,7 +113,8 @@ export const users = [
     countryFlag: "https://flagcdn.com/br.svg",
   },
   {
-    fullName: "Maria Gomez",
+    id: createId(),
+    name: "Maria Gomez",
     role: "GUEST",
     email: "maria@example.com",
     nationality: "Mexico",
@@ -106,7 +122,8 @@ export const users = [
     countryFlag: "https://flagcdn.com/mx.svg",
   },
   {
-    fullName: "Ahmed Hassan",
+    id: createId(),
+    name: "Ahmed Hassan",
     role: "GUEST",
     email: "ahmed@gmail.com",
     nationality: "Egypt",
@@ -114,7 +131,8 @@ export const users = [
     countryFlag: "https://flagcdn.com/eg.svg",
   },
   {
-    fullName: "John Doe",
+    id: createId(),
+    name: "John Doe",
     role: "GUEST",
     email: "johndoe@gmail.com",
     nationality: "United States",
@@ -122,7 +140,8 @@ export const users = [
     countryFlag: "https://flagcdn.com/us.svg",
   },
   {
-    fullName: "Fatima Ahmed",
+    id: createId(),
+    name: "Fatima Ahmed",
     role: "GUEST",
     email: "fatima@example.com",
     nationality: "Pakistan",
@@ -130,7 +149,8 @@ export const users = [
     countryFlag: "https://flagcdn.com/pk.svg",
   },
   {
-    fullName: "David Smith",
+    id: createId(),
+    name: "David Smith",
     role: "GUEST",
     email: "david@gmail.com",
     nationality: "Australia",
@@ -138,7 +158,8 @@ export const users = [
     countryFlag: "https://flagcdn.com/au.svg",
   },
   {
-    fullName: "Marie Dupont",
+    id: createId(),
+    name: "Marie Dupont",
     role: "GUEST",
     email: "marie@gmail.com",
     nationality: "France",
@@ -146,7 +167,8 @@ export const users = [
     countryFlag: "https://flagcdn.com/fr.svg",
   },
   {
-    fullName: "Ramesh Patel",
+    id: createId(),
+    name: "Ramesh Patel",
     role: "GUEST",
     email: "ramesh@gmail.com",
     nationality: "India",
@@ -154,7 +176,8 @@ export const users = [
     countryFlag: "https://flagcdn.com/in.svg",
   },
   {
-    fullName: "Fatimah Al-Sayed",
+    id: createId(),
+    name: "Fatimah Al-Sayed",
     role: "GUEST",
     email: "fatimah@gmail.com",
     nationality: "Kuwait",
@@ -162,7 +185,8 @@ export const users = [
     countryFlag: "https://flagcdn.com/kw.svg",
   },
   {
-    fullName: "Nina Williams",
+    id: createId(),
+    name: "Nina Williams",
     role: "GUEST",
     email: "nina@hotmail.com",
     nationality: "South Africa",
@@ -170,7 +194,8 @@ export const users = [
     countryFlag: "https://flagcdn.com/za.svg",
   },
   {
-    fullName: "Taro Tanaka",
+    id: createId(),
+    name: "Taro Tanaka",
     role: "GUEST",
     email: "taro@gmail.com",
     nationality: "Japan",
@@ -178,7 +203,8 @@ export const users = [
     countryFlag: "https://flagcdn.com/jp.svg",
   },
   {
-    fullName: "Abdul Rahman",
+    id: createId(),
+    name: "Abdul Rahman",
     role: "GUEST",
     email: "abdul@gmail.com",
     nationality: "Saudi Arabia",
@@ -186,7 +212,8 @@ export const users = [
     countryFlag: "https://flagcdn.com/sa.svg",
   },
   {
-    fullName: "Julie Nguyen",
+    id: createId(),
+    name: "Julie Nguyen",
     role: "GUEST",
     email: "julie@gmail.com",
     nationality: "Vietnam",
@@ -194,7 +221,8 @@ export const users = [
     countryFlag: "https://flagcdn.com/vn.svg",
   },
   {
-    fullName: "Sara Lee",
+    id: createId(),
+    name: "Sara Lee",
     role: "GUEST",
     email: "sara@gmail.com",
     nationality: "South Korea",
@@ -202,7 +230,8 @@ export const users = [
     countryFlag: "https://flagcdn.com/kr.svg",
   },
   {
-    fullName: "Carlos Gomez",
+    id: createId(),
+    name: "Carlos Gomez",
     role: "GUEST",
     email: "carlos@yahoo.com",
     nationality: "Colombia",
@@ -210,7 +239,8 @@ export const users = [
     countryFlag: "https://flagcdn.com/co.svg",
   },
   {
-    fullName: "Emma Brown",
+    id: createId(),
+    name: "Emma Brown",
     role: "GUEST",
     email: "emma@gmail.com",
     nationality: "Canada",
@@ -218,7 +248,8 @@ export const users = [
     countryFlag: "https://flagcdn.com/ca.svg",
   },
   {
-    fullName: "Juan Hernandez",
+    id: createId(),
+    name: "Juan Hernandez",
     role: "GUEST",
     email: "juan@yahoo.com",
     nationality: "Argentina",
@@ -226,7 +257,8 @@ export const users = [
     countryFlag: "https://flagcdn.com/ar.svg",
   },
   {
-    fullName: "Ibrahim Ahmed",
+    id: createId(),
+    name: "Ibrahim Ahmed",
     role: "GUEST",
     email: "ibrahim@yahoo.com",
     nationality: "Nigeria",
@@ -234,7 +266,8 @@ export const users = [
     countryFlag: "https://flagcdn.com/ng.svg",
   },
   {
-    fullName: "Mei Chen",
+    id: createId(),
+    name: "Mei Chen",
     role: "GUEST",
     email: "mei@gmail.com",
     nationality: "Taiwan",

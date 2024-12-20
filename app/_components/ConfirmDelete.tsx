@@ -4,7 +4,7 @@ import Heading from "./Heading";
 type ConfirmDelteProps = {
   resourceName: string;
   onConfirm: () => void;
-  disabled: boolean;
+  disabled?: boolean;
   onCloseModal?: () => void;
 };
 
@@ -15,9 +15,9 @@ function ConfirmDelete({
   onCloseModal,
 }: ConfirmDelteProps) {
   return (
-    <div className="w-[40rem] flex flex-col gap-[1.2rem]">
+    <div className="flex w-[40rem] flex-col gap-[1.2rem]">
       <Heading as="h3">Delete {resourceName}</Heading>
-      <p className="text-gray-500 mb-[1.2rem] dark:text-gray-400">
+      <p className="mb-[1.2rem] text-gray-500 dark:text-gray-400">
         Are you sure you want to delete this {resourceName} permanently? This
         action cannot be undone.
       </p>

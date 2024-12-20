@@ -1,7 +1,7 @@
 type FormProps = {
   type?: "regular" | "modal";
   children: React.ReactNode;
-  action: (FormData: FormData) => void;
+  action?: (FormData: FormData) => void;
 };
 
 function Form({ type = "regular", children, action }: FormProps) {

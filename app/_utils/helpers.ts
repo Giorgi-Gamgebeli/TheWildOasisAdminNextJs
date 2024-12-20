@@ -1,14 +1,12 @@
-import { formatDistance, parseISO } from "date-fns";
+import { formatDistance } from "date-fns";
 import { differenceInDays } from "date-fns";
 
 // We want to make this function work for both Date objects and strings (which come from Supabase)
-export const subtractDates = (
-  dateStr1: Date | string,
-  dateStr2: Date | string,
-) => differenceInDays(parseISO(String(dateStr1)), parseISO(String(dateStr2)));
+export const subtractDates = (dateStr1: Date, dateStr2: Date) =>
+  differenceInDays(dateStr1, dateStr2);
 
-export const formatDistanceFromNow = (dateStr: string) =>
-  formatDistance(parseISO(dateStr), new Date(), {
+export const formatDistanceFromNow = (dateStr: Date) =>
+  formatDistance(dateStr, new Date(), {
     addSuffix: true,
   })
     .replace("about ", "")

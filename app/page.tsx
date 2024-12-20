@@ -1,4 +1,4 @@
-import LoginForm from "./_authentication/LoginForm";
+import LoginForm from "./_components/LoginForm";
 import Logo from "./_components/Logo";
 import Heading from "./_components/Heading";
 

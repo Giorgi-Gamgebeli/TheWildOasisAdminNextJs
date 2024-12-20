@@ -8,6 +8,11 @@ const nextConfig = {
         port: "",
         pathname: "/storage/v1/object/public/cabin-images/**",
       },
+      {
+        protocol: "https",
+        hostname: "ik.imagekit.io",
+        port: "",
+      },
     ],
   },
 

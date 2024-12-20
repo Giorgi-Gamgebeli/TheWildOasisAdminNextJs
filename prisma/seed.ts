@@ -1,49 +1,53 @@
+import { cabins } from "../app/_data/data-cabins";
+import { guestUsers } from "../app/_data/data-guests";
+import { reservations } from "../app/_data/data-reservations";
+import { createId } from "@paralleldrive/cuid2";
 import { Prisma, PrismaClient } from "@prisma/client";
-import { hash } from "bcrypt";
+import { hash } from "bcryptjs";
 const prisma = new PrismaClient();
 
-// const initialUsers: Prisma.UserCreateInput[] = [
-//   {
-//     id: "wfahsfiwufaiwufhfk23432423r3tedse363",
-//     name: "Alice",
-//     email: "alice@prisma.io",
-//   },
-//   {
-//     id: "wfahsfiwufaiwufhwdfafk23432423r3tedse363",
-//     email: "bob@prisma.io",
-//     name: "Bob",
-//   },
-// ];
+const settings: Prisma.SettingsCreateInput = {
+  minimumReservationLength: 6,
+  maxReservationLength: 90,
+  maxGuestsPerReservation: 5,
+  breakFastPrice: 15,
+};
 
 async function main() {
-  const password = await hash("test", 12);
-  const alice = await prisma.user.upsert({
-    where: { email: "alice@prisma.io" },
+  const password = await hash("12345678", 12);
+  await prisma.user.upsert({
+    where: { email: "adminaccount@gmail.com" },
     update: {},
     create: {
-      id: "wfahsfiwufaiwdafawfwufhfk23432423r3tedse363",
-      email: "alice@prisma.io",
-      name: "Alice",
+      id: createId(),
+      email: "adminaccount@gmail.com",
+      name: "Giorgi Gamgebeli",
+      role: "ADMIN",
       password,
     },
   });
-  // const bob = await prisma.user.upsert({
-  //   where: { email: "bob@prisma.io" },
-  //   update: {},
-  //   create: {
-  //     email: "bob@prisma.io",
-  //     name: "Bob",
-  //   },
-  // });
 
-  // console.log(`start seeding ...`);
+  for (const cabin of cabins) {
+    await prisma.cabins.create({
+      data: cabin,
+    });
+  }
 
-  // for (const user of initialUsers) {
-  //   const newUser = await prisma.user.create({
-  //     data: user,
-  //   });
-  //   console.log(`created user with email: ${newUser.email}`);
-  // }
+  let i = 0;
+  for (const user of guestUsers) {
+    if (i === 24) break;
+    const newUser = await prisma.user.create({
+      data: user,
+    });
+
+    await prisma.reservations.create({
+      data: { ...reservations[i], userId: newUser.id },
+    });
+    i++;
+  }
+  await prisma.settings.create({
+    data: settings,
+  });
 }
 main()
   .then(async () => {
