@@ -4,8 +4,8 @@ import { Prisma } from "@prisma/client";
 import { SignupSchema, UpdatedUserSchema } from "../_schemas";
 import prisma from "./db";
 import { hash } from "bcryptjs";
-import imagekit from "./imagekit";
 import { revalidatePath } from "next/cache";
+import supabase from "./supabase";
 
 export async function getUserByEmail(email: string) {
   try {
@@ -90,18 +90,24 @@ export async function updateUser(formData: FormData) {
 
   const { password, fullName, userId, avatar } = result.data;
 
-  const fileBuffer =
-    avatar?.size !== 0 && avatar
-      ? Buffer.from(await avatar.arrayBuffer())
-      : null;
+  // const fileBuffer =
+  //   avatar?.size !== 0 && avatar
+  //     ? Buffer.from(await avatar.arrayBuffer())
+  //     : null;
 
-  if (fileBuffer === null) throw new Error("Size more than 2mb");
+  // if (fileBuffer === null) throw new Error("Size more than 2mb");
 
   try {
-    const response = await imagekit.upload({
-      file: fileBuffer,
-      fileName: `${userId}-image`,
-    });
+    let imageUrl;
+    if (avatar instanceof File) {
+      const { data: bucketData, error } = await supabase.storage
+        .from("images-bucket")
+        .upload(`${fullName}${userId}`, avatar);
+
+      if (error) throw new Error(error.message);
+
+      imageUrl = bucketData.path;
+    }
 
     const user = await getUserById(userId);
 
@@ -115,7 +121,7 @@ export async function updateUser(formData: FormData) {
       data: {
         name: fullName,
         password: hashedPassword,
-        image: response.url,
+        image: imageUrl || undefined,
       },
     });
 

@@ -4,8 +4,9 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "ik.imagekit.io",
+        hostname: "towxpbhkteuivfortifw.supabase.co",
         port: "",
+        pathname: "/storage/v1/object/public/images-bucket/**",
       },
     ],
   },

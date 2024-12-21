@@ -3,8 +3,9 @@
 import { Prisma } from "@prisma/client";
 import prisma from "./db";
 import { revalidatePath } from "next/cache";
-import imagekit from "./imagekit";
 import { CreateCabinSchema, UpdateCabinSchema } from "../_schemas/cabinSchemas";
+import supabase, { bucketUrl } from "./supabase";
+import { createId } from "@paralleldrive/cuid2";
 
 export async function deleteCabins() {
   try {
@@ -55,19 +56,18 @@ export async function createCabin(formData: FormData) {
 
   const { image, name, ...data } = result.data;
 
-  const fileBuffer = Buffer.from(await image.arrayBuffer());
-
   try {
-    const response = await imagekit.upload({
-      file: fileBuffer,
-      fileName: `${name}-image`,
-    });
+    const { data: bucketData, error } = await supabase.storage
+      .from("images-bucket")
+      .upload(`${name}${createId()}`, image);
+
+    if (error) throw new Error(error.message);
 
     await prisma.cabins.create({
       data: {
         ...data,
         name: name,
-        image: response.url,
+        image: `${bucketUrl}${bucketData.path}`,
       },
     });
 
@@ -107,12 +107,13 @@ export async function updateCabin(formData: FormData) {
     let imageUrl;
 
     if (fileBuffer && image && image.size > 0) {
-      const response = await imagekit.upload({
-        file: fileBuffer,
-        fileName: `${name}-image`,
-      });
+      const { data: bucketData, error } = await supabase.storage
+        .from("images-bucket")
+        .upload(`${name}${createId()}`, image);
 
-      imageUrl = response.url;
+      if (error) throw new Error(error.message);
+
+      imageUrl = bucketData.path;
     } else {
       const cabin = await prisma.cabins.findUnique({
         where: { id: +cabinId },
