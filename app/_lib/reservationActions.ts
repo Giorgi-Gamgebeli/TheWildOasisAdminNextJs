@@ -258,3 +258,13 @@ export async function getReservation(id: number) {
     console.error(error);
   }
 }
+
+export async function getAllReservations() {
+  try {
+    const reservations = await prisma.reservations.findMany();
+
+    return reservations;
+  } catch (error) {
+    console.error(error);
+  }
+}

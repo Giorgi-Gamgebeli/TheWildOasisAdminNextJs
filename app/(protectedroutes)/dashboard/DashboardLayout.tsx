@@ -16,6 +16,7 @@ async function DashboardLayout({
 }) {
   const lastFromURL = searchParams?.last;
   const numDays = !lastFromURL ? 7 : +lastFromURL;
+  // const numDays = 7;
   const queryDate = subDays(new Date(), numDays).toISOString();
 
   const reservations = await getReservationsAfterDate(queryDate);

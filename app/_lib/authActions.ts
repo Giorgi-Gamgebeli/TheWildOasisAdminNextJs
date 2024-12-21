@@ -91,6 +91,11 @@ export async function updateUser(formData: FormData) {
 
   const { password, fullName, userId, avatar } = result.data;
 
+  // const fileBuffer =
+  //   avatar?.size !== 0 && avatar
+  //     ? Buffer.from(await avatar.arrayBuffer())
+  //     : null;
+
   try {
     let imageUrl;
     if (avatar instanceof File) {

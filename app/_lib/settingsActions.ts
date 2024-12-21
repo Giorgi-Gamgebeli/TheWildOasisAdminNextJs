@@ -1,5 +1,6 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import prisma from "./db";
 
 export async function updateSettings(value: number, field: string) {
@@ -10,6 +11,8 @@ export async function updateSettings(value: number, field: string) {
         [field]: value,
       },
     });
+
+    revalidatePath("/settings");
   } catch (error) {
     console.error(error);
     return { error: "Something went wrong" };
