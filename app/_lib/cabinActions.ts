@@ -140,13 +140,16 @@ export async function updateCabin(formData: FormData) {
 
 export async function duplicateCabin(cabinId: number) {
   try {
-    const data = await prisma.cabins.findUnique({
+    const fetchedData = await prisma.cabins.findUnique({
       where: {
         id: cabinId,
       },
     });
 
-    if (!data) throw new Error("Can't find cabin");
+    if (!fetchedData) throw new Error("Can't find cabin");
+
+
+    const { id: _, ...data } = fetchedData;
 
     await prisma.cabins.create({
       data: {
