@@ -4,6 +4,7 @@ import { auth } from "@/auth";
 
 async function UserAvatar() {
   const session = await auth();
+  console.log(session);
 
   return (
     <div className="flex items-center gap-[1.2rem] pr-6 text-[1.4rem] font-medium">

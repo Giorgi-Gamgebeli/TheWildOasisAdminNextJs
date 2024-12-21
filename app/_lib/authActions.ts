@@ -5,7 +5,7 @@ import { SignupSchema, UpdatedUserSchema } from "../_schemas";
 import prisma from "./db";
 import { hash } from "bcryptjs";
 import { revalidatePath } from "next/cache";
-import supabase from "./supabase";
+import supabase, { bucketUrl } from "./supabase";
 
 export async function getUserByEmail(email: string) {
   try {
@@ -121,7 +121,7 @@ export async function updateUser(formData: FormData) {
       data: {
         name: fullName,
         password: hashedPassword,
-        image: imageUrl || undefined,
+        image: `${bucketUrl}${imageUrl}` || undefined,
       },
     });
 
