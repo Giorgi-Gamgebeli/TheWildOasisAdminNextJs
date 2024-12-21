@@ -21,7 +21,6 @@ function SignupForm() {
   const [errors, action] = useFormState(
     async (_: void | object, formData: FormData) => {
       const res = await signup(formData);
-      await new Promise((res) => setTimeout(res, 5000));
 
       if (res?.zodErrors) {
         return { zodErrors: res.zodErrors };

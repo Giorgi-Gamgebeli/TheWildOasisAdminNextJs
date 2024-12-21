@@ -52,8 +52,9 @@ export async function signup(formData: FormData) {
 
   const { email, password, fullName } = result.data;
 
-  const existingUser = await getUserByEmail(email);
   try {
+    const existingUser = await getUserByEmail(email);
+
     if (existingUser) return { error: "Email already in use" };
 
     const hashedPassword = await hash(password, 12);
@@ -89,13 +90,6 @@ export async function updateUser(formData: FormData) {
     };
 
   const { password, fullName, userId, avatar } = result.data;
-
-  // const fileBuffer =
-  //   avatar?.size !== 0 && avatar
-  //     ? Buffer.from(await avatar.arrayBuffer())
-  //     : null;
-
-  // if (fileBuffer === null) throw new Error("Size more than 2mb");
 
   try {
     let imageUrl;

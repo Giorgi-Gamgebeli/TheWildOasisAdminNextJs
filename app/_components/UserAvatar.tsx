@@ -8,7 +8,7 @@ async function UserAvatar() {
   return (
     <div className="flex items-center gap-[1.2rem] pr-6 text-[1.4rem] font-medium">
       <Image
-        className="block aspect-square w-[3.6rem] rounded-[50%] object-cover object-center outline-2 outline-[var(--color-grey-100)]"
+        className="block aspect-square h-[3.6rem] w-[3.6rem] rounded-[50%] object-cover object-center outline-2 outline-[var(--color-grey-100)]"
         src={session?.user.image || defaultAvatar}
         alt={`Avatar of person`}
         width={36}
