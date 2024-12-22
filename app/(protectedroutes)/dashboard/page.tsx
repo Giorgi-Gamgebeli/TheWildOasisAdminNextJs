@@ -2,12 +2,15 @@ import DashboardFilter from "./DashboardFilter";
 import DashboardLayout from "./DashboardLayout";
 import Heading from "../../_components/Heading";
 import Row from "../../_components/Row";
+import { getAllReservations, getAllStays } from "@/app/_lib/reservationActions";
+import { getAllCabins } from "@/app/_lib/cabinActions";
+import TodayActivity from "./TodayActivity";
 
-function Page({
-  searchParams,
-}: {
-  searchParams: Record<string, string | undefined>;
-}) {
+async function Page() {
+  const reservations = await getAllReservations();
+  const cabins = await getAllCabins();
+  const stays = await getAllStays();
+
   return (
     <>
       <Row type="horizontal">
@@ -15,7 +18,13 @@ function Page({
         <DashboardFilter />
       </Row>
 
-      <DashboardLayout searchParams={searchParams} />
+      <DashboardLayout
+        stays={stays}
+        cabins={cabins}
+        reservations={reservations}
+      >
+        <TodayActivity />
+      </DashboardLayout>
     </>
   );
 }

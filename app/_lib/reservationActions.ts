@@ -4,7 +4,6 @@ import { Prisma } from "@prisma/client";
 import prisma from "./db";
 import { revalidatePath } from "next/cache";
 import { getToday } from "../_utils/helpers";
-import { PAGE_SIZE } from "../_utils/constants";
 
 export async function deleteReservations() {
   try {
@@ -72,6 +71,25 @@ export async function getStaysAfterDate(date: string) {
           gte: new Date(date), // Records with startDate >= provided date
           lte: new Date(getToday()), // Records with startDate <= today
         },
+        user: {
+          role: "GUEST",
+        },
+      },
+      include: {
+        user: true,
+      },
+    });
+
+    return stays;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+export async function getAllStays() {
+  try {
+    const stays = await prisma.reservations.findMany({
+      where: {
         user: {
           role: "GUEST",
         },
@@ -170,45 +188,11 @@ export async function updateCheckin({
   }
 }
 
-type GetReservationsTypes = {
-  filter: {
-    field: string;
-    value: string;
-  } | null;
-  sortBy: {
-    field: string;
-    direction: string;
-  };
-  page: number;
-};
-
-export async function getReservations({
-  filter,
-  sortBy,
-  page,
-}: GetReservationsTypes) {
+export async function getAllReservationsWithCount() {
   try {
-    const where: Record<string, string> = {};
+    const count = await prisma.reservations.count();
 
-    // FILTER
-    if (filter) where[filter.field] = filter.value;
-
-    // PAGINATION
-    const skip = page ? (page - 1) * PAGE_SIZE : 0;
-    const take = PAGE_SIZE;
-
-    // SORTING
-    const orderBy = sortBy ? { [sortBy.field]: sortBy.direction } : undefined;
-
-    // COUNT TOTAL RECORDS
-    const totalRecords = await prisma.reservations.count({ where });
-
-    // QUERY
     const reservations = await prisma.reservations.findMany({
-      where,
-      orderBy,
-      skip,
-      take,
       include: {
         user: {
           select: {
@@ -224,7 +208,7 @@ export async function getReservations({
       },
     });
 
-    return { reservations, count: totalRecords };
+    return { reservations, count };
   } catch (error) {
     console.error(error);
     return { reservations: [], count: 0 };
