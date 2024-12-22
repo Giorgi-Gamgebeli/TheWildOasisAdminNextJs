@@ -1,6 +1,6 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 
 type FilterProps = {
   filterField: string;
@@ -9,8 +9,7 @@ type FilterProps = {
 
 function Filter({ filterField, options }: FilterProps) {
   const searchParams = useSearchParams();
-  // const router = useRouter();
-  // const pathname = usePathname();
+  const pathname = usePathname();
   const currentFilter = searchParams.get(filterField) || options[0].value;
 
   function handleClick(value: string) {
@@ -18,10 +17,7 @@ function Filter({ filterField, options }: FilterProps) {
     params.set(filterField, value);
     if (searchParams.get("page")) params.set("page", "1");
 
-    // router.replace(`${pathname}?${params.toString()}`, {
-    //   scroll: false,
-    // });
-    history.pushState(null, "", params.toString());
+    history.pushState(null, "", `${pathname}?${params.toString()}`);
   }
 
   return (

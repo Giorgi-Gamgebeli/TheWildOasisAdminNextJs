@@ -1,6 +1,6 @@
 "use client";
 
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import Select from "./Select";
 
 type SortByProps = {
@@ -9,7 +9,6 @@ type SortByProps = {
 
 function SortBy({ options }: SortByProps) {
   const searchParams = useSearchParams();
-  const router = useRouter();
   const pathname = usePathname();
   const sortBy = searchParams.get("sortBy") || "";
 
@@ -17,7 +16,7 @@ function SortBy({ options }: SortByProps) {
     const params = new URLSearchParams(searchParams);
     params.set("sortBy", e.target.value);
 
-    router.replace(`${pathname}?${params.toString()}`);
+    history.pushState(null, "", `${pathname}?${params.toString()}`);
   }
 
   return (

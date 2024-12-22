@@ -2,11 +2,10 @@
 
 import { HiChevronLeft, HiChevronRight } from "react-icons/hi2";
 import { PAGE_SIZE } from "../_utils/constants";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 
 function Pagination({ count }: { count: number }) {
   const searchParams = useSearchParams();
-  const router = useRouter();
   const pathname = usePathname();
 
   const pageParam = searchParams.get("page");
@@ -19,9 +18,8 @@ function Pagination({ count }: { count: number }) {
     const params = new URLSearchParams(searchParams);
 
     params.set("page", `${next}`);
-    router.replace(`${pathname}?${params.toString()}`, {
-      scroll: false,
-    });
+
+    history.pushState(null, "", `${pathname}?${params.toString()}`);
   }
 
   function prevPage() {
@@ -29,9 +27,8 @@ function Pagination({ count }: { count: number }) {
     const params = new URLSearchParams(searchParams);
 
     params.set("page", `${prev}`);
-    router.replace(`${pathname}?${params.toString()}`, {
-      scroll: false,
-    });
+
+    history.pushState(null, "", `${pathname}?${params.toString()}`);
   }
 
   if (pageCount <= 1) return null;
