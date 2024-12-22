@@ -9,7 +9,7 @@ import NavLink from "./NavLink";
 
 function MainNav() {
   return (
-    <nav>
+    <nav className="mb-10">
       <ul className="flex flex-col gap-[0.8rem]">
         <li>
           <NavLink text="Home" href="/dashboard">

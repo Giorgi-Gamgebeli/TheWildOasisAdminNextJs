@@ -4,8 +4,8 @@ import { Prisma } from "@prisma/client";
 import { SignupSchema, UpdatedUserSchema } from "../_schemas";
 import prisma from "./db";
 import { hash } from "bcryptjs";
-import { revalidatePath } from "next/cache";
 import supabase, { bucketUrl } from "./supabase";
+import { z } from "zod";
 
 export async function getUserByEmail(email: string) {
   try {
@@ -35,15 +35,8 @@ export async function getUserById(id: string) {
   }
 }
 
-export async function signup(formData: FormData) {
-  const formDataObj = {
-    email: formData.get("email") || "",
-    password: formData.get("password") || "",
-    fullName: formData.get("fullName") || "",
-    passwordConfirm: formData.get("passwordConfirm") || "",
-  };
-
-  const result = SignupSchema.safeParse(formDataObj);
+export async function signup(values: z.infer<typeof SignupSchema>) {
+  const result = SignupSchema.safeParse(values);
 
   if (!result.success)
     return {
@@ -76,8 +69,8 @@ export async function signup(formData: FormData) {
 export async function updateUser(formData: FormData) {
   const formDataObj = {
     fullName: formData.get("fullName") || "",
-    password: formData.get("password") || "DONTCHANGEPAS",
-    passwordConfirm: formData.get("passwordConfirm") || "DONTCHANGEPAS",
+    password: formData.get("password") || "",
+    passwordConfirm: formData.get("passwordConfirm") || "",
     avatar: formData.get("avatar"),
     userId: formData.get("userId"),
   };
@@ -97,15 +90,17 @@ export async function updateUser(formData: FormData) {
   //     : null;
 
   try {
-    let imageUrl;
-    if (avatar instanceof File) {
+    let imageUrl = undefined;
+
+    if (avatar.size > 0) {
       const { data: bucketData, error } = await supabase.storage
         .from("images-bucket")
         .upload(`${fullName}${userId}`, avatar);
 
-      if (error) throw new Error(error.message);
+      if (error && error.message !== "The resource already exists")
+        throw new Error(error.message);
 
-      imageUrl = bucketData.path;
+      imageUrl = bucketData?.path || `${fullName}${userId}`;
     }
 
     const user = await getUserById(userId);
@@ -113,18 +108,16 @@ export async function updateUser(formData: FormData) {
     if (!user) throw new Error("Account not registered");
 
     const hashedPassword =
-      password === "DONTCHANGEPAS" ? user?.password : await hash(password, 12);
+      password === "" ? user?.password : await hash(password, 12);
 
     await prisma.user.update({
       where: { id: userId },
       data: {
         name: fullName,
         password: hashedPassword,
-        image: `${bucketUrl}${imageUrl}` || undefined,
+        image: imageUrl && `${bucketUrl}${imageUrl}`,
       },
     });
-
-    revalidatePath("/account");
   } catch (error) {
     console.error(error);
     return { error: "Something went wrong" };

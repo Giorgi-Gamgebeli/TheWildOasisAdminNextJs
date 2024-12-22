@@ -41,13 +41,9 @@ export const SignupSchema = z
         message: "Password needs a minimum of 8 characters",
       }),
 
-    passwordConfirm: z
-      .string({
-        message: "Only text is allowed",
-      })
-      .min(8, {
-        message: "Password is required",
-      }),
+    passwordConfirm: z.string({
+      message: "Only text is allowed",
+    }),
   })
   .superRefine(({ passwordConfirm, password }, ctx) => {
     if (passwordConfirm !== password) {
@@ -73,24 +69,17 @@ export const UpdatedUserSchema = z
       .string({
         message: "Only text is allowed",
       })
-      .min(8, {
+      .refine((password) => password === "" || password.length >= 8, {
         message: "Password needs a minimum of 8 characters",
       }),
 
-    passwordConfirm: z
-      .string({
-        message: "Only text is allowed",
-      })
-      .min(8, {
-        message: "Password is required",
-      }),
+    passwordConfirm: z.string({
+      message: "Only text is allowed",
+    }),
 
-    avatar: z
-      .instanceof(File)
-      .refine((file) => file.size <= 2 * 1024 * 1024, {
-        message: "File size must be less than 2MB",
-      })
-      .optional(), // Optional if the file input is not mandatory
+    avatar: z.instanceof(File).refine((file) => file.size <= 2 * 1024 * 1024, {
+      message: "File size must be less than 2MB",
+    }),
 
     userId: z.string(),
   })

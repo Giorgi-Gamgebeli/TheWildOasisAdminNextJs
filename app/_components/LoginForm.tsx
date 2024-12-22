@@ -12,8 +12,9 @@ function LoginForm() {
   async function clientAction(formData: FormData) {
     const res = await login(formData);
 
-    if (res?.error) toast.error(res.error);
+    if (res?.error) return toast.error(res.error);
 
+    // To redirect user to dashboard with middleware after they are logged in, otherwise session is null until refresh
     window.location.reload();
   }
 

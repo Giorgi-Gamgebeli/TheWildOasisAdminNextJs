@@ -11,6 +11,7 @@ import { updateUser } from "../_lib/authActions";
 import toast from "react-hot-toast";
 import { useSession } from "next-auth/react";
 import Spinner from "../_components/Spinner";
+import { useRef } from "react";
 
 function UpdateUserDataForm() {
   const initialErrorState = {
@@ -19,6 +20,10 @@ function UpdateUserDataForm() {
       passwordConfirm: undefined,
     },
   };
+
+  const session = useSession();
+
+  const ref = useRef<HTMLFormElement>(null);
 
   const [errors, action] = useFormState(
     async (_: void | object, formData: FormData) => {
@@ -32,16 +37,16 @@ function UpdateUserDataForm() {
       }
 
       toast.success("Account successfully updated!");
+      session.update();
+      ref.current?.reset();
     },
     initialErrorState,
   );
 
-  const session = useSession();
-
   if (!session.data) return <Spinner />;
 
   return (
-    <Form action={action}>
+    <Form action={action} useRef={ref}>
       <FormRow label="Email address">
         <Input defaultValue={session.data?.user.email} disabled />
       </FormRow>

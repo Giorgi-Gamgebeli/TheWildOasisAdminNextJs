@@ -9,7 +9,7 @@ function UserAvatar() {
   const { data: session } = useSession();
 
   return (
-    <div className="flex items-center gap-[1.2rem] pr-6 text-[1.4rem] font-medium">
+    <div className="flex h-[3.6rem] items-center gap-[1.2rem] pr-6 text-[1.4rem] font-medium">
       {session ? (
         <>
           <Image

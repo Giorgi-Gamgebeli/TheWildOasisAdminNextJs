@@ -31,6 +31,7 @@ export const {
 
       token.role = existingUser.role;
       token.image = existingUser.image;
+      token.name = existingUser.name;
 
       return token;
     },
