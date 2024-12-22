@@ -13,8 +13,8 @@ function Logout() {
     <ButtonIcon
       disabled={isPending}
       onClick={() => {
-        startTransition(() => {
-          signOut();
+        startTransition(async () => {
+          await signOut();
         });
       }}
     >

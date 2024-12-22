@@ -1,6 +1,5 @@
 "use client";
 
-import { SessionProvider } from "next-auth/react";
 import { Toaster } from "react-hot-toast";
 import { useDarkMode } from "../_context/DarkModeContext";
 
@@ -8,7 +7,7 @@ function ClientProviders({ children }: { children: React.ReactNode }) {
   const { isDarkMode } = useDarkMode();
 
   return (
-    <SessionProvider>
+    <>
       {children}
 
       <Toaster
@@ -31,7 +30,7 @@ function ClientProviders({ children }: { children: React.ReactNode }) {
           },
         }}
       />
-    </SessionProvider>
+    </>
   );
 }
 

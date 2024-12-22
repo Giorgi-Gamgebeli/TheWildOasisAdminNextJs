@@ -13,6 +13,8 @@ function LoginForm() {
     const res = await login(formData);
 
     if (res?.error) toast.error(res.error);
+
+    window.location.reload();
   }
 
   return (

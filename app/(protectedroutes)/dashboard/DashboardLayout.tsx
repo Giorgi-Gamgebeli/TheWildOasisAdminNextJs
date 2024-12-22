@@ -42,7 +42,6 @@ function DashboardLayout({
       reservationDate <= new Date(getToday({ end: true }))
     );
   });
-  console.log(reservationsAfterDate);
 
   const staysAfterDate = stays.filter((stay) => {
     const stayDate = new Date(stay.startDate);

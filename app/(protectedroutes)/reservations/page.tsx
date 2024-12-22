@@ -4,6 +4,8 @@ import Row from "../../_components/Row";
 import ReservationTable from "./ReservationTable";
 import ReservationTableOperations from "./ReservationTableOperations";
 
+export const revalidate = 12 * 60 * 60;
+
 async function Page() {
   const { reservations, count } = await getAllReservationsWithCount();
 

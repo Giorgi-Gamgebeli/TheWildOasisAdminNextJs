@@ -2,17 +2,17 @@ import type { NextAuthConfig } from "next-auth";
 import { compare } from "bcryptjs";
 import Credentials from "next-auth/providers/credentials";
 import { getUserByEmail } from "./app/_lib/authActions";
-// import { z } from "zod";
-// import { LoginSchema } from "./app/_schemas";
+import { LoginSchema } from "./app/_schemas";
 
 export default {
   providers: [
     Credentials({
-      async authorize(
-        credentials,
-        // : z.infer<typeof LoginSchema>
-      ) {
+      async authorize(credentials) {
         if (!credentials?.email || !credentials.password) return null;
+
+        const result = LoginSchema.safeParse(credentials);
+
+        if (!result.success) return null;
 
         const user = await getUserByEmail(credentials.email as string);
 

@@ -41,51 +41,6 @@ export async function createDummyReservations(
   }
 }
 
-export async function getReservationsAfterDate(date: string) {
-  try {
-    const reservations = await prisma.reservations.findMany({
-      where: {
-        createdAt: {
-          gte: new Date(date), // Records created after or on date
-          lte: new Date(getToday({ end: true })), // Records up to the end of today
-        },
-      },
-      select: {
-        createdAt: true,
-        totalPrice: true,
-        extrasPrice: true,
-      },
-    });
-
-    return reservations;
-  } catch (error) {
-    console.error(error);
-  }
-}
-
-export async function getStaysAfterDate(date: string) {
-  try {
-    const stays = await prisma.reservations.findMany({
-      where: {
-        startDate: {
-          gte: new Date(date), // Records with startDate >= provided date
-          lte: new Date(getToday()), // Records with startDate <= today
-        },
-        user: {
-          role: "GUEST",
-        },
-      },
-      include: {
-        user: true,
-      },
-    });
-
-    return stays;
-  } catch (error) {
-    console.error(error);
-  }
-}
-
 export async function getAllStays() {
   try {
     const stays = await prisma.reservations.findMany({

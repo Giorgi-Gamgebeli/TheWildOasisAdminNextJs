@@ -1,7 +1,6 @@
 "use server";
 
 import { signIn } from "@/auth";
-import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 import { AuthError } from "next-auth";
 import { isRedirectError } from "next/dist/client/components/redirect";
 import { LoginSchema } from "../_schemas";
@@ -21,7 +20,8 @@ export async function login(formData: FormData) {
     await signIn("credentials", {
       email,
       password,
-      redirectTo: DEFAULT_LOGIN_REDIRECT,
+      // redirectTo: DEFAULT_LOGIN_REDIRECT,
+      redirect: false,
     });
   } catch (error) {
     if (isRedirectError(error)) throw error;
