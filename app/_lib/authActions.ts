@@ -90,7 +90,7 @@ export async function updateUser(formData: FormData) {
   //     : null;
 
   try {
-    let imageUrl = undefined;
+    let imageUrl = null;
 
     if (avatar.size > 0) {
       const { data: bucketData, error } = await supabase.storage
