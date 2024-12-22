@@ -4,6 +4,7 @@ import React, { createContext, useContext, useState } from "react";
 import { createPortal } from "react-dom";
 import { HiEllipsisVertical } from "react-icons/hi2";
 import useOutsideClick from "../_hooks/useOutsideClick";
+import Link from "next/link";
 
 function Menu({ children }: { children: React.ReactNode }) {
   return <div className="flex items-center justify-end">{children}</div>;
@@ -133,9 +134,39 @@ function Button({ children, icon, onClick }: ButtonProps) {
   );
 }
 
+type MenusLinkProps = {
+  icon: React.ReactNode;
+  children: React.ReactNode;
+  href: string;
+};
+
+function MenusLink({ children, icon, href }: MenusLinkProps) {
+  const { close } = useMenusContext();
+
+  function handleClick() {
+    close();
+  }
+
+  return (
+    <li>
+      <Link
+        className="flex w-full items-center gap-[1.6rem] border-none bg-none px-[2.4rem] py-[1.2rem] text-left text-[1.6rem] text-gray-400 transition-all duration-300 hover:bg-gray-50 dark:text-gray-500 dark:hover:bg-gray-900"
+        href={href}
+        onClick={handleClick}
+      >
+        {icon}
+        <span className="text-[1.4rem] text-gray-700 transition-all duration-200 dark:text-gray-200">
+          {children}
+        </span>
+      </Link>
+    </li>
+  );
+}
+
 Menus.Menu = Menu;
 Menus.List = List;
 Menus.Toggle = Toggle;
 Menus.Button = Button;
+Menus.MenusLink = MenusLink;
 
 export default Menus;

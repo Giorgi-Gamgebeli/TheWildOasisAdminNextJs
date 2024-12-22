@@ -74,9 +74,7 @@ function ReservationDetail({ reservation }: ReservationDetailProps) {
 
       <ButtonGroup>
         {status === "unconfirmed" && (
-          <Button onClick={() => router.push(`/checkin/${reservationId}`)}>
-            Check in
-          </Button>
+          <Button href={`/checkin/${reservationId}`}>Check in</Button>
         )}
 
         {status === "checked-in" && (

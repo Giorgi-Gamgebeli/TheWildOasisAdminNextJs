@@ -16,7 +16,6 @@ import {
 } from "react-icons/hi2";
 import Modal from "../../_components/Modal";
 import ConfirmDelete from "../../_components/ConfirmDelete";
-import { useRouter } from "next/navigation";
 import { Prisma } from "@prisma/client";
 import {
   deleteReservation,
@@ -49,8 +48,6 @@ function ReservationRow({
     cabin: { name: cabinName },
   },
 }: ReservationRowProps) {
-  const router = useRouter();
-
   const statusToTagName = {
     unconfirmed: "blue",
     "checked-in": "green",
@@ -107,20 +104,20 @@ function ReservationRow({
         <Menus.Menu>
           <Menus.Toggle id={reservationId} />
           <Menus.List id={reservationId}>
-            <Menus.Button
+            <Menus.MenusLink
               icon={<HiEye />}
-              onClick={() => router.push(`/reservations/${reservationId}`)}
+              href={`/reservations/${reservationId}`}
             >
               See details
-            </Menus.Button>
+            </Menus.MenusLink>
 
             {validStatus === "unconfirmed" && (
-              <Menus.Button
+              <Menus.MenusLink
                 icon={<HiArrowDownOnSquare />}
-                onClick={() => router.push(`/checkin/${reservationId}`)}
+                href={`/checkin/${reservationId}`}
               >
                 Check in
-              </Menus.Button>
+              </Menus.MenusLink>
             )}
 
             {validStatus === "checked-in" && (

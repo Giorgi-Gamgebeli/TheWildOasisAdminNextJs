@@ -2,6 +2,7 @@
 
 import { useFormStatus } from "react-dom";
 import { tw } from "../_utils/tw";
+import Link from "next/link";
 
 type ButtonProps = {
   size?: "small" | "medium" | "large";
@@ -11,6 +12,7 @@ type ButtonProps = {
   type?: "submit" | "reset" | "button";
   pendingStatus?: React.ReactNode;
   disabled?: boolean;
+  href?: string;
 };
 
 function Button({
@@ -21,6 +23,7 @@ function Button({
   type,
   disabled,
   pendingStatus,
+  href,
 }: ButtonProps) {
   const sizeStyles = {
     small: tw(
@@ -41,14 +44,27 @@ function Button({
   const { pending } = useFormStatus();
 
   return (
-    <button
-      disabled={pending || disabled}
-      onClick={onClick}
-      type={type}
-      className={`rounded-md shadow-[0_0_0_rgba(0,0,0,0.04)] disabled:cursor-not-allowed dark:shadow-[0_0_0_rgba(0,0,0,0.4)] ${sizeStyles[size]} ${variationsStyles[variation]} `}
-    >
-      {pending && pendingStatus ? pendingStatus : children}
-    </button>
+    <>
+      {!href ? (
+        <button
+          disabled={pending || disabled}
+          onClick={onClick}
+          type={type}
+          className={`rounded-md shadow-[0_0_0_rgba(0,0,0,0.04)] disabled:cursor-not-allowed dark:shadow-[0_0_0_rgba(0,0,0,0.4)] ${sizeStyles[size]} ${variationsStyles[variation]} `}
+        >
+          {pending && pendingStatus ? pendingStatus : children}
+        </button>
+      ) : (
+        <Link
+          onClick={onClick}
+          type={type}
+          href={href}
+          className={`rounded-md shadow-[0_0_0_rgba(0,0,0,0.04)] disabled:cursor-not-allowed dark:shadow-[0_0_0_rgba(0,0,0,0.4)] ${sizeStyles[size]} ${variationsStyles[variation]} `}
+        >
+          {pending && pendingStatus ? pendingStatus : children}
+        </Link>
+      )}
+    </>
   );
 }
 
