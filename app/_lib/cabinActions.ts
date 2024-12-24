@@ -35,8 +35,6 @@ export async function createCabins(data: Prisma.CabinsCreateInput[]) {
 
 export async function getAllCabins() {
   try {
-    await isAuthenticated();
-
     const allCabins = await prisma.cabins.findMany();
 
     return allCabins;

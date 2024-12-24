@@ -50,8 +50,6 @@ export async function createDummyReservations(
 
 export async function getAllStays() {
   try {
-    await isAuthenticated();
-
     const stays = await prisma.reservations.findMany({
       where: {
         user: {
@@ -71,8 +69,6 @@ export async function getAllStays() {
 
 export async function getStaysTodayActivity() {
   try {
-    await isAuthenticated();
-
     const activities = await prisma.reservations.findMany({
       where: {
         OR: [
@@ -160,8 +156,6 @@ export async function updateCheckin({
 
 export async function getAllReservationsWithCount() {
   try {
-    await isAuthenticated();
-
     const count = await prisma.reservations.count();
 
     const reservations = await prisma.reservations.findMany({
@@ -189,8 +183,6 @@ export async function getAllReservationsWithCount() {
 
 export async function getReservation(id: number) {
   try {
-    await isAuthenticated();
-
     const reservation = await prisma.reservations.findUnique({
       where: { id },
       include: {
@@ -219,8 +211,6 @@ export async function getReservation(id: number) {
 
 export async function getAllReservations() {
   try {
-    await isAuthenticated();
-
     const reservations = await prisma.reservations.findMany();
 
     return reservations;
