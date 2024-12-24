@@ -17,7 +17,7 @@ type StatsProps = {
         status: string | null;
         extrasPrice: number | null;
         user: {
-          name: string | null;
+          name: string;
         };
       }[]
     | undefined;

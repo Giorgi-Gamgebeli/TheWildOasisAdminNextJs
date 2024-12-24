@@ -1,3 +1,5 @@
+import "server-only";
+
 import { getToken } from "next-auth/jwt";
 import { cookies } from "next/headers";
 
@@ -27,4 +29,6 @@ export async function isAuthenticated() {
 
   // If not authenticated throw error
   if (!!!jwt) throw new Error("Not authenticated");
+
+  return jwt;
 }

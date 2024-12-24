@@ -25,7 +25,7 @@ type ReservationDetailProps = {
           name: string;
         };
         user: {
-          name: string | null;
+          name: string;
           email: string;
           nationalID: string | null;
           nationality: string | null;
@@ -67,25 +67,34 @@ function ReservationDetail({ reservation }: ReservationDetailProps) {
             {status?.replace("-", " ")}
           </Tag>
         </div>
-        <ButtonText onClick={() => router.back()}>&larr; Back</ButtonText>
+        <ButtonText ariaLabel="Go back" onClick={() => router.back()}>
+          &larr; Back
+        </ButtonText>
       </Row>
 
       <ReservationDataBox reservation={reservation} />
 
       <ButtonGroup>
         {status === "unconfirmed" && (
-          <Button href={`/checkin/${reservationId}`}>Check in</Button>
+          <Button ariaLabel="Check in" href={`/checkin/${reservationId}`}>
+            Check in
+          </Button>
         )}
 
         {status === "checked-in" && (
-          <Button onClick={() => updateCheckout(reservationId)}>
+          <Button
+            ariaLabel="Check out"
+            onClick={() => updateCheckout(reservationId)}
+          >
             Check out
           </Button>
         )}
 
         <Modal>
           <Modal.Open opens="delete">
-            <Button variation="danger">Delete reservation</Button>
+            <Button ariaLabel="Delete reservation" variation="danger">
+              Delete reservation
+            </Button>
           </Modal.Open>
           <Modal.Window name="delete">
             <ConfirmDelete
@@ -98,7 +107,11 @@ function ReservationDetail({ reservation }: ReservationDetailProps) {
           </Modal.Window>
         </Modal>
 
-        <Button variation="secondary" onClick={() => router.back()}>
+        <Button
+          ariaLabel="Go back"
+          variation="secondary"
+          onClick={() => router.back()}
+        >
           Back
         </Button>
       </ButtonGroup>

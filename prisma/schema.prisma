@@ -7,32 +7,6 @@ generator client {
   provider = "prisma-client-js"
 }
 
-enum UserRole {
-  ADMIN
-  GUEST
-}
-
-model User {
-  id            String          @id @default(cuid())
-  name          String?
-  email         String          @unique
-  password      String?
-  role          UserRole        @default(GUEST)
-  image         String?
-  emailVerified DateTime?
-  nationalID    String?
-  nationality   String?
-  countryFlag   String?
-  accounts      Account[]
-  sessions      Session[]
-  // Optional for WebAuthn support
-  Authenticator Authenticator[]
-
-  createdAt    DateTime       @default(now())
-  updatedAt    DateTime       @updatedAt
-  reservations Reservations[]
-}
-
 model Account {
   userId            String
   type              String
@@ -86,6 +60,32 @@ model Authenticator {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@id([userId, credentialID])
+}
+
+enum UserRole {
+  ADMIN
+  GUEST
+}
+
+model User {
+  id            String          @id @default(cuid())
+  name          String
+  email         String          @unique
+  password      String?
+  role          UserRole        @default(GUEST)
+  image         String?
+  emailVerified DateTime?
+  nationalID    String?
+  nationality   String?
+  countryFlag   String?
+  accounts      Account[]
+  sessions      Session[]
+  // Optional for WebAuthn support
+  Authenticator Authenticator[]
+
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  reservations Reservations[]
 }
 
 model Cabins {

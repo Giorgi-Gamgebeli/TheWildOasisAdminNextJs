@@ -24,13 +24,19 @@ function ConfirmDelete({
 
       <div className="flex justify-end gap-[1.2rem]">
         <Button
+          ariaLabel="Cancel"
           variation="secondary"
           disabled={disabled}
           onClick={onCloseModal}
         >
           Cancel
         </Button>
-        <Button variation="danger" disabled={disabled} onClick={onConfirm}>
+        <Button
+          ariaLabel="Delete"
+          variation="danger"
+          disabled={disabled}
+          onClick={onConfirm}
+        >
           Delete
         </Button>
       </div>

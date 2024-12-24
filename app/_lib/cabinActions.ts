@@ -1,31 +1,28 @@
 "use server";
 
-import { Prisma } from "@prisma/client";
 import prisma from "./db";
 import { revalidatePath } from "next/cache";
 import { CreateCabinSchema, UpdateCabinSchema } from "../_schemas/cabinSchemas";
 import supabase, { bucketUrl } from "./supabase";
 import { createId } from "@paralleldrive/cuid2";
 import { isAuthenticated } from "../_utils/serverHelpers";
+import { z } from "zod";
+import { CabinsSchemaDatabase } from "../_schemas/databaseSchemas";
 
-export async function deleteCabins() {
+export async function createCabins(
+  data: z.infer<typeof CabinsSchemaDatabase>[],
+) {
+  const result = CabinsSchemaDatabase.safeParse(data);
+
   try {
     await isAuthenticated();
 
-    await prisma.cabins.deleteMany();
-    revalidatePath("/cabins");
-  } catch (error) {
-    console.error(error);
-  }
-}
+    if (!result.success) throw new Error("Validation failed");
 
-// TODO
-export async function createCabins(data: Prisma.CabinsCreateInput[]) {
-  try {
-    await isAuthenticated();
+    const parsedData = result.data;
 
     await prisma.cabins.createMany({
-      data: data,
+      data: parsedData,
     });
     revalidatePath("/cabins");
   } catch (error) {
@@ -33,13 +30,39 @@ export async function createCabins(data: Prisma.CabinsCreateInput[]) {
   }
 }
 
-export async function getAllCabins() {
-  try {
-    const allCabins = await prisma.cabins.findMany();
+export async function duplicateCabin(
+  cabinId: z.infer<typeof CabinsSchemaDatabase.shape.id>,
+) {
+  const result = CabinsSchemaDatabase.shape.id.safeParse(cabinId);
 
-    return allCabins;
+  try {
+    await isAuthenticated();
+
+    if (!result.success) throw new Error("Validation failed");
+
+    const parsedId = result.data;
+
+    const fetchedData = await prisma.cabins.findUnique({
+      where: {
+        id: parsedId,
+      },
+    });
+
+    if (!fetchedData) throw new Error("Can't find cabin");
+
+    const { id: _, ...data } = fetchedData;
+
+    await prisma.cabins.create({
+      data: {
+        ...data,
+        name: `Copy of ${data.name}`,
+      },
+    });
+
+    revalidatePath("/cabins");
   } catch (error) {
     console.error(error);
+    return { error: "Something went wrong" };
   }
 }
 
@@ -86,6 +109,16 @@ export async function createCabin(formData: FormData) {
   }
 }
 
+export async function getAllCabins() {
+  try {
+    const allCabins = await prisma.cabins.findMany();
+
+    return allCabins;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
 export async function updateCabin(formData: FormData) {
   const formDataObj = {
     name: formData.get("name"),
@@ -94,7 +127,7 @@ export async function updateCabin(formData: FormData) {
     discount: Number(formData.get("discount")),
     description: formData.get("description"),
     image: formData.get("image"),
-    cabinId: formData.get("cabinId"),
+    cabinId: Number(formData.get("cabinId")),
   };
 
   const result = UpdateCabinSchema.safeParse(formDataObj);
@@ -127,7 +160,7 @@ export async function updateCabin(formData: FormData) {
     }
 
     await prisma.cabins.update({
-      where: { id: +cabinId },
+      where: { id: cabinId },
       data: {
         ...data,
         name,
@@ -142,26 +175,20 @@ export async function updateCabin(formData: FormData) {
   }
 }
 
-// TODO
-export async function duplicateCabin(cabinId: number) {
+export async function deleteCabin(
+  id: z.infer<typeof CabinsSchemaDatabase.shape.id>,
+) {
+  const result = CabinsSchemaDatabase.shape.id.safeParse(id);
+
   try {
     await isAuthenticated();
 
-    const fetchedData = await prisma.cabins.findUnique({
-      where: {
-        id: cabinId,
-      },
-    });
+    if (!result.success) throw new Error("Validation failed");
 
-    if (!fetchedData) throw new Error("Can't find cabin");
+    const parsedId = result.data;
 
-    const { id: _, ...data } = fetchedData;
-
-    await prisma.cabins.create({
-      data: {
-        ...data,
-        name: `Copy of ${data.name}`,
-      },
+    await prisma.cabins.delete({
+      where: { id: parsedId },
     });
 
     revalidatePath("/cabins");
@@ -171,17 +198,13 @@ export async function duplicateCabin(cabinId: number) {
   }
 }
 
-// TODO
-export async function deleteCabin(id: number) {
+export async function deleteCabins() {
   try {
     await isAuthenticated();
 
-    await prisma.cabins.delete({
-      where: { id },
-    });
+    await prisma.cabins.deleteMany();
     revalidatePath("/cabins");
   } catch (error) {
     console.error(error);
-    return { error: "Something went wrong" };
   }
 }

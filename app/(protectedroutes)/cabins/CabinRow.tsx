@@ -32,13 +32,16 @@ function CabinRow({ cabin }: { cabin: Prisma.CabinsGetPayload<object> }) {
 
   return (
     <Table.Row>
-      <Image
-        width={64}
-        height={95}
-        src={image}
-        className="aspect-[3/2] -translate-x-[7px] scale-150 transform object-cover object-center text-sm"
-        alt="Image of cabin/house in woods"
-      />
+      <div className="relative aspect-[3/2] h-auto w-[6.4rem]">
+        <Image
+          fill
+          src={image}
+          sizes="20vw"
+          priority
+          className="aspect-[3/2] w-64 -translate-x-[7px] scale-150 transform object-cover object-center text-sm"
+          alt="Image of cabin/house in woods"
+        />
+      </div>
       <div className="font-sono text-[1.6rem] font-semibold">{name}</div>
       <div>Fits up to {maxCapacity} guests</div>
 

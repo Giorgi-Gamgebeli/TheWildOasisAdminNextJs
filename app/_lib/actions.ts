@@ -3,7 +3,7 @@
 import { signIn } from "@/auth";
 import { AuthError } from "next-auth";
 import { isRedirectError } from "next/dist/client/components/redirect";
-import { LoginSchema } from "../_schemas";
+import { LoginSchema } from "../_schemas/authSchemas";
 
 export async function login(formData: FormData) {
   const formDataObj = {
@@ -22,6 +22,7 @@ export async function login(formData: FormData) {
       password,
       redirect: false,
     });
+    
   } catch (error) {
     if (isRedirectError(error)) throw error;
 

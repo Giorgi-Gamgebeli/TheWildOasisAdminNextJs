@@ -1,7 +1,7 @@
 import type { NextAuthConfig } from "next-auth";
 import { compare } from "bcryptjs";
 import Credentials from "next-auth/providers/credentials";
-import { LoginSchema } from "./app/_schemas";
+import { LoginSchema } from "./app/_schemas/authSchemas";
 import prisma from "./app/_lib/db";
 
 export default {
@@ -22,7 +22,7 @@ export default {
           },
         });
 
-        if (!user || !user.password) return null;
+        if (!user || !user.password || user.role !== "ADMIN") return null;
 
         const isPasswordValid = await compare(
           password as string,

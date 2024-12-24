@@ -11,6 +11,7 @@ function Logout() {
 
   return (
     <ButtonIcon
+      ariaLabel="Icon"
       disabled={isPending}
       onClick={() => {
         startTransition(async () => {

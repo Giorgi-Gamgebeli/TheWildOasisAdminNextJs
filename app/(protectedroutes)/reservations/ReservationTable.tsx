@@ -18,7 +18,7 @@ export type ReservationTableProps = {
         };
         user: {
           email: string;
-          name: string | null;
+          name: string;
         };
       } & Prisma.ReservationsGetPayload<object>)[]
     | undefined;

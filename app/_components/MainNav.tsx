@@ -7,7 +7,7 @@ import {
 } from "react-icons/hi2";
 import NavLink from "./NavLink";
 
-function MainNav() {
+async function MainNav() {
   return (
     <nav className="mb-10">
       <ul className="flex flex-col gap-[0.8rem]">

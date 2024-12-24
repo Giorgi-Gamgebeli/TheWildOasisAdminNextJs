@@ -29,21 +29,10 @@ function CreateCabinForm({
     discount,
     description,
   } = cabinToEdit;
-  const isEditSession = Boolean(editId);
-
-  const initialErrorState = {
-    zodErrors: {
-      name: undefined,
-      maxCapacity: undefined,
-      regularPrice: undefined,
-      discount: undefined,
-      description: undefined,
-      image: undefined,
-    },
-  };
+  const isEditSession = !!editId;
 
   const [errors, action] = useFormState(
-    async (_: void | object, formData: FormData) => {
+    async (_: void | object | null, formData: FormData) => {
       let res;
       if (!isEditSession) res = await createCabin(formData);
       if (isEditSession) res = await updateCabin(formData);
@@ -59,7 +48,7 @@ function CreateCabinForm({
       if (isEditSession) toast.success("Cabin successfully edited!");
       onCloseModal?.();
     },
-    initialErrorState,
+    null,
   );
 
   return (
@@ -121,13 +110,16 @@ function CreateCabinForm({
       <FormRow>
         {/* type is an HTML attribute! */}
         <Button
+          ariaLabel="Cancel"
           variation="secondary"
           type="reset"
           onClick={() => onCloseModal?.()}
         >
           Cancel
         </Button>
-        <Button>{isEditSession ? "Edit cabin" : "Create new cabin"}</Button>
+        <Button ariaLabel="Create cabin">
+          {isEditSession ? "Edit cabin" : "Create new cabin"}
+        </Button>
       </FormRow>
     </Form>
   );

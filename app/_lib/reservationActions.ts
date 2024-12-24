@@ -1,48 +1,105 @@
 "use server";
 
-import { Prisma } from "@prisma/client";
 import prisma from "./db";
 import { revalidatePath } from "next/cache";
 import { getToday } from "../_utils/helpers";
 import { isAuthenticated } from "../_utils/serverHelpers";
+import { z } from "zod";
+import { ReservationsSchemaDatabase } from "../_schemas/databaseSchemas";
+import {
+  ReservationWithoutId,
+  UpdateCheckinSchema,
+} from "../_schemas/reservationSchemas";
 
-export async function deleteReservations() {
+export async function createDummyReservations(
+  data: z.infer<typeof ReservationWithoutId>[],
+) {
+  const result = ReservationWithoutId.safeParse(data);
+
   try {
     await isAuthenticated();
 
-    await prisma.reservations.deleteMany();
+    if (!result.success) throw new Error("Validation failed");
+
+    const parsedData = result.data;
+
+    await prisma.reservations.createMany({
+      data: parsedData,
+    });
     revalidatePath("/reservations");
   } catch (error) {
     console.error(error);
   }
 }
 
-export async function deleteReservation(id: number) {
+export async function getAllReservationsWithCount() {
   try {
-    await isAuthenticated();
+    const count = await prisma.reservations.count();
 
-    await prisma.reservations.delete({
-      where: {
-        id,
+    const reservations = await prisma.reservations.findMany({
+      include: {
+        user: {
+          select: {
+            name: true,
+            email: true,
+          },
+        },
+        cabin: {
+          select: {
+            name: true,
+          },
+        },
       },
     });
 
-    revalidatePath("/reservations");
+    return { reservations, count };
+  } catch (error) {
+    console.error(error);
+    return { reservations: [], count: 0 };
+  }
+}
+
+export async function getReservation(
+  id: z.infer<typeof ReservationsSchemaDatabase.shape.id>,
+) {
+  const result = ReservationsSchemaDatabase.shape.id.safeParse(id);
+
+  try {
+    if (!result.success) throw new Error("Validation failed");
+
+    const parsedId = result.data;
+
+    const reservation = await prisma.reservations.findUnique({
+      where: { id: parsedId },
+      include: {
+        user: {
+          select: {
+            name: true,
+            email: true,
+            countryFlag: true,
+            nationalID: true,
+            nationality: true,
+          },
+        },
+        cabin: {
+          select: {
+            name: true,
+          },
+        },
+      },
+    });
+
+    return reservation;
   } catch (error) {
     console.error(error);
   }
 }
 
-export async function createDummyReservations(
-  data: Prisma.ReservationsCreateManyInput[],
-) {
+export async function getAllReservations() {
   try {
-    await isAuthenticated();
+    const reservations = await prisma.reservations.findMany();
 
-    await prisma.reservations.createMany({
-      data: data,
-    });
-    revalidatePath("/reservations");
+    return reservations;
   } catch (error) {
     console.error(error);
   }
@@ -57,7 +114,11 @@ export async function getAllStays() {
         },
       },
       include: {
-        user: true,
+        user: {
+          select: {
+            name: true,
+          },
+        },
       },
     });
 
@@ -106,13 +167,21 @@ export async function getStaysTodayActivity() {
   }
 }
 
-export async function updateCheckout(id: number) {
+export async function updateCheckout(
+  id: z.infer<typeof ReservationsSchemaDatabase.shape.id>,
+) {
+  const result = ReservationsSchemaDatabase.shape.id.safeParse(id);
+
   try {
     await isAuthenticated();
 
+    if (!result.success) throw new Error("Validation failed");
+
+    const parsedId = result.data;
+
     await prisma.reservations.update({
       where: {
-        id,
+        id: parsedId,
       },
       data: {
         status: "checked-out",
@@ -126,21 +195,15 @@ export async function updateCheckout(id: number) {
   }
 }
 
-type UpdateCheckinTypes = {
-  id: number;
-  hasBreakfast?: true;
-  extrasPrice?: number;
-  totalPrice?: number;
-};
+export async function updateCheckin(data: z.infer<typeof UpdateCheckinSchema>) {
+  const result = UpdateCheckinSchema.safeParse(data);
 
-export async function updateCheckin({
-  id,
-  hasBreakfast,
-  extrasPrice,
-  totalPrice,
-}: UpdateCheckinTypes) {
   try {
     await isAuthenticated();
+
+    if (!result.success) throw new Error("Validation failed");
+
+    const { id, extrasPrice, hasBreakfast, totalPrice } = result.data;
 
     await prisma.reservations.update({
       where: {
@@ -154,66 +217,35 @@ export async function updateCheckin({
   }
 }
 
-export async function getAllReservationsWithCount() {
+export async function deleteReservations() {
   try {
-    const count = await prisma.reservations.count();
+    await isAuthenticated();
 
-    const reservations = await prisma.reservations.findMany({
-      include: {
-        user: {
-          select: {
-            name: true,
-            email: true,
-          },
-        },
-        cabin: {
-          select: {
-            name: true,
-          },
-        },
-      },
-    });
-
-    return { reservations, count };
-  } catch (error) {
-    console.error(error);
-    return { reservations: [], count: 0 };
-  }
-}
-
-export async function getReservation(id: number) {
-  try {
-    const reservation = await prisma.reservations.findUnique({
-      where: { id },
-      include: {
-        user: {
-          select: {
-            name: true,
-            email: true,
-            countryFlag: true,
-            nationalID: true,
-            nationality: true,
-          },
-        },
-        cabin: {
-          select: {
-            name: true,
-          },
-        },
-      },
-    });
-
-    return reservation;
+    await prisma.reservations.deleteMany();
+    revalidatePath("/reservations");
   } catch (error) {
     console.error(error);
   }
 }
 
-export async function getAllReservations() {
-  try {
-    const reservations = await prisma.reservations.findMany();
+export async function deleteReservation(
+  id: z.infer<typeof ReservationsSchemaDatabase.shape.id>,
+) {
+  const result = ReservationsSchemaDatabase.shape.id.safeParse(id);
 
-    return reservations;
+  try {
+    await isAuthenticated();
+    if (!result.success) throw new Error("Validation failed");
+
+    const parsedId = result.data;
+
+    await prisma.reservations.delete({
+      where: {
+        id: parsedId,
+      },
+    });
+
+    revalidatePath("/reservations");
   } catch (error) {
     console.error(error);
   }

@@ -15,10 +15,10 @@ function Error({ error, reset }: ErrorProps) {
         <Heading className="mb-[1.6rem]" as="h1">
           Something went wrong 😥
         </Heading>
-        <p className="font-sono mb-[3.2rem] text-gray-500 dark:text-gray-400">
+        <p className="mb-[3.2rem] font-sono text-gray-500 dark:text-gray-400">
           {error.message}
         </p>
-        <Button size="large" onClick={reset}>
+        <Button ariaLabel="retry" size="large" onClick={reset}>
           Try again
         </Button>
       </div>

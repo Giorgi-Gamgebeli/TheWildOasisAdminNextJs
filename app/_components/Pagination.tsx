@@ -49,6 +49,7 @@ function Pagination({ count }: { count: number }) {
 
       <div className="flex gap-[0.6rem]">
         <button
+          aria-label="Pagination"
           className={`flex items-center justify-center gap-[0.4rem] rounded-md border-none bg-gray-50 px-[0.8rem] py-[0.6rem] text-[1.4rem] font-medium transition-all duration-300 dark:bg-gray-900 dark:text-indigo-50 ${currentPage !== 1 ? "hover:bg-indigo-600 hover:text-indigo-50 dark:hover:bg-indigo-600 dark:hover:text-indigo-50" : ""}}`}
           onClick={prevPage}
           disabled={currentPage === 1}
@@ -58,6 +59,7 @@ function Pagination({ count }: { count: number }) {
         </button>
 
         <button
+          aria-label="Pagination"
           className={`flex items-center justify-center gap-[0.4rem] rounded-md border-none bg-gray-50 px-[0.8rem] py-[0.6rem] text-[1.4rem] font-medium transition-all duration-300 dark:bg-gray-900 dark:text-indigo-50 ${currentPage !== pageCount ? "hover:bg-indigo-600 hover:text-indigo-50 dark:hover:bg-indigo-600 dark:hover:text-indigo-50" : ""}}`}
           onClick={nextPage}
           disabled={currentPage === pageCount}

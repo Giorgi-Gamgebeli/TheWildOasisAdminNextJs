@@ -21,7 +21,7 @@ type ReservationDataBoxProps = {
           name: string;
         };
         user: {
-          name: string | null;
+          name: string;
           email: string;
           nationalID: string | null;
           nationality: string | null;

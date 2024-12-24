@@ -13,6 +13,7 @@ type ButtonProps = {
   pendingStatus?: React.ReactNode;
   disabled?: boolean;
   href?: string;
+  ariaLabel: string;
 };
 
 function Button({
@@ -24,6 +25,7 @@ function Button({
   disabled,
   pendingStatus,
   href,
+  ariaLabel,
 }: ButtonProps) {
   const sizeStyles = {
     small: tw(
@@ -50,6 +52,7 @@ function Button({
           disabled={pending || disabled}
           onClick={onClick}
           type={type}
+          aria-label={ariaLabel}
           className={`rounded-md shadow-[0_0_0_rgba(0,0,0,0.04)] disabled:cursor-not-allowed dark:shadow-[0_0_0_rgba(0,0,0,0.4)] ${sizeStyles[size]} ${variationsStyles[variation]} `}
         >
           {pending && pendingStatus ? pendingStatus : children}
@@ -59,6 +62,7 @@ function Button({
           onClick={onClick}
           type={type}
           href={href}
+          aria-label={ariaLabel}
           className={`rounded-md shadow-[0_0_0_rgba(0,0,0,0.04)] disabled:cursor-not-allowed dark:shadow-[0_0_0_rgba(0,0,0,0.4)] ${sizeStyles[size]} ${variationsStyles[variation]} `}
         >
           {pending && pendingStatus ? pendingStatus : children}

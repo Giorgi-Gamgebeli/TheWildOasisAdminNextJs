@@ -1,70 +1,17 @@
 import { z } from "zod";
-import {
-  EmailSchema,
-  NameSchema,
-  PasswordConfirmSchema,
-  UserIdSchema,
-} from "./singleSchemas";
+import { ACCEPTED_IMAGE_TYPES, MAX_FILE_SIZE } from "../_utils/constants";
 
-export const LoginSchema = z.object({
-  email: EmailSchema,
-  password: z.string().min(1, {
-    message: "Password is required",
-  }),
+export const PasswordConfirmSchema = z.string({
+  message: "Only text is allowed",
 });
 
-export const SignupSchema = z
-  .object({
-    fullName: NameSchema,
+export const UserIdSchema = z.string();
 
-    email: EmailSchema,
-
-    password: z
-      .string({
-        message: "Only text is allowed",
-      })
-      .min(8, {
-        message: "Password needs a minimum of 8 characters",
-      }),
-
-    passwordConfirm: PasswordConfirmSchema,
-  })
-  .superRefine(({ passwordConfirm, password }, ctx) => {
-    if (passwordConfirm !== password) {
-      ctx.addIssue({
-        code: "custom",
-        message: "The passwords did not match",
-        path: ["passwordConfirm"],
-      });
-    }
-  });
-
-export const UpdatedUserSchema = z
-  .object({
-    fullName: NameSchema,
-
-    password: z
-      .string({
-        message: "Only text is allowed",
-      })
-      .refine((password) => password === "" || password.length >= 8, {
-        message: "Password needs a minimum of 8 characters",
-      }),
-
-    passwordConfirm: PasswordConfirmSchema,
-
-    avatar: z.instanceof(File).refine((file) => file.size <= 2 * 1024 * 1024, {
-      message: "File size must be less than 2MB",
-    }),
-
-    userId: UserIdSchema,
-  })
-  .superRefine(({ passwordConfirm, password }, ctx) => {
-    if (passwordConfirm !== password) {
-      ctx.addIssue({
-        code: "custom",
-        message: "The passwords did not match",
-        path: ["passwordConfirm"],
-      });
-    }
-  });
+export const FileImageSchema = z
+  .instanceof(File)
+  .refine((file) => file?.size <= MAX_FILE_SIZE, `Max image size is 2MB`)
+  .refine(
+    (file) =>
+      file?.size !== 0 ? ACCEPTED_IMAGE_TYPES.includes(file?.type) : true,
+    "Only .jpg, .jpeg, .png and .webp formats are supported",
+  );

@@ -87,6 +87,7 @@ function Toggle({ id }: { id: number }) {
 
   return (
     <button
+      aria-label="Icon"
       className="translate-x-[0.8rem] rounded-md border-none bg-none p-[0.4rem] text-[2.4rem] text-gray-700 transition-all duration-200 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-800"
       onClick={handleClick}
     >
@@ -137,6 +138,7 @@ function Button({ children, icon, onClick }: ButtonProps) {
       <button
         className="flex w-full items-center gap-[1.6rem] border-none bg-none px-[2.4rem] py-[1.2rem] text-left text-[1.6rem] text-gray-400 transition-all duration-300 hover:bg-gray-50 dark:text-gray-500 dark:hover:bg-gray-900"
         onClick={handleClick}
+        aria-label="icon and text"
       >
         {icon}
         <span className="text-[1.4rem] text-gray-700 transition-all duration-200 dark:text-gray-200">
@@ -166,6 +168,7 @@ function MenusLink({ children, icon, href }: MenusLinkProps) {
         className="flex w-full items-center gap-[1.6rem] border-none bg-none px-[2.4rem] py-[1.2rem] text-left text-[1.6rem] text-gray-400 transition-all duration-300 hover:bg-gray-50 dark:text-gray-500 dark:hover:bg-gray-900"
         href={href}
         onClick={handleClick}
+        aria-label="Link for menus"
       >
         {icon}
         <span className="text-[1.4rem] text-gray-700 transition-all duration-200 dark:text-gray-200">

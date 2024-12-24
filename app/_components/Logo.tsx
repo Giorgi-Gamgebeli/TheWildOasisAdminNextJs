@@ -11,9 +11,15 @@ function Logo() {
   const src = isDarkMode ? darkLogo : lightLogo;
 
   return (
-    <div className="flex items-center justify-center">
-      <div className="h-[14rem] w-[14rem]">
-        <Image height={140} width={140} src={src} alt="Wild oasis logo" />
+    <div className="mb-14 flex items-center justify-center">
+      <div className="relative aspect-[3/2] h-[10rem] w-auto">
+        <Image
+          fill
+          src={src}
+          className="aspect-[3/2] h-[10rem] w-auto object-contain"
+          alt="Wild oasis logo"
+          sizes="20vw"
+        />
       </div>
     </div>
   );

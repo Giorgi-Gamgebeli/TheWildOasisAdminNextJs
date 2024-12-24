@@ -37,7 +37,7 @@ function LoginForm() {
         />
       </FormRowVertical>
       <FormRowVertical>
-        <Button size="large" pendingStatus={<SpinnerMini />}>
+        <Button ariaLabel="Log in" size="large" pendingStatus={<SpinnerMini />}>
           Login in
         </Button>
       </FormRowVertical>

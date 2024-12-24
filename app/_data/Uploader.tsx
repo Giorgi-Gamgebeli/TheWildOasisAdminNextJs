@@ -1,6 +1,3 @@
-"use client";
-
-import { useState } from "react";
 import { isFuture, isPast, isToday } from "date-fns";
 import Button from "../_components/Button";
 import { subtractDates } from "../_utils/helpers";
@@ -83,8 +80,6 @@ async function createReservations() {
 }
 
 function Uploader() {
-  const [isLoading, setIsLoading] = useState(false);
-
   // async function uploadAll() {
   //   setIsLoading(true);
   //   await deleteReservations();
@@ -97,10 +92,10 @@ function Uploader() {
   // }
 
   async function uploadReservations() {
-    setIsLoading(true);
+    "use server";
+
     await deleteReservations();
     await createReservations();
-    setIsLoading(false);
   }
 
   return (
@@ -109,13 +104,15 @@ function Uploader() {
         SAMPLE DATA
       </h3>
 
-      {/* <Button onClick={uploadAll} disabled={isLoading}>
+      <form action={uploadReservations}>
+        {/* <Button onClick={uploadAll} >
         Upload ALL
-      </Button> */}
+        </Button> */}
 
-      <Button onClick={uploadReservations} disabled={isLoading}>
-        Upload reservations ONLY
-      </Button>
+        <Button ariaLabel="Upload reservations">
+          Upload reservations ONLY
+        </Button>
+      </form>
     </div>
   );
 }

@@ -29,7 +29,7 @@ export type ReservationRowProps = {
     };
     user: {
       email: string;
-      name: string | null;
+      name: string;
     };
   } & Prisma.ReservationsGetPayload<object>;
 };

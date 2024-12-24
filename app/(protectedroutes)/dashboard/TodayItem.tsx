@@ -7,7 +7,7 @@ import { Prisma } from "@prisma/client";
 type TodayItemProps = {
   activity: {
     user: {
-      name: string | null;
+      name: string;
       nationalID: string | null;
       nationality: string | null;
       countryFlag: string | null;
@@ -31,6 +31,7 @@ function TodayItem({ activity }: TodayItemProps) {
       {status === "unconfirmed" && (
         <Link
           href={`/checkin/${id}`}
+          aria-label="To each checkin"
           className="rounded-md border-none bg-indigo-600 px-[0.8rem] py-[0.4rem] text-center text-[1.2rem] font-semibold uppercase text-indigo-50 hover:bg-indigo-700"
         >
           Check in

@@ -26,7 +26,7 @@ type CheckinReservationProps = {
           name: string;
         };
         user: {
-          name: string | null;
+          name: string;
           email: string;
           nationalID: string | null;
           nationality: string | null;
@@ -89,7 +89,9 @@ function CheckinReservation({
     <>
       <Row type="horizontal">
         <Heading as="h1">Check in reservation #{reservationId}</Heading>
-        <ButtonText onClick={() => router.back()}>&larr; Back</ButtonText>
+        <ButtonText ariaLabel="Go back" onClick={() => router.back()}>
+          &larr; Back
+        </ButtonText>
       </Row>
 
       <ReservationDataBox reservation={reservation} />
@@ -128,10 +130,18 @@ function CheckinReservation({
       </div>
 
       <ButtonGroup>
-        <Button onClick={handleCheckin} disabled={!confirmPaid}>
+        <Button
+          ariaLabel="Check in"
+          onClick={handleCheckin}
+          disabled={!confirmPaid}
+        >
           Check in reservation #{reservationId}
         </Button>
-        <Button variation="secondary" onClick={() => router.back()}>
+        <Button
+          ariaLabel="Go back"
+          variation="secondary"
+          onClick={() => router.back()}
+        >
           Back
         </Button>
       </ButtonGroup>

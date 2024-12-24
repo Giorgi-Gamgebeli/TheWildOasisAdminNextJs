@@ -14,22 +14,12 @@ import Spinner from "../_components/Spinner";
 import { useRef } from "react";
 
 function UpdateUserDataForm() {
-  const initialErrorState = {
-    zodErrors: {
-      fullName: undefined,
-      password: undefined,
-      passwordConfirm: undefined,
-      avatar: undefined,
-      userId: undefined,
-    },
-  };
-
   const session = useSession();
 
   const ref = useRef<HTMLFormElement>(null);
 
   const [errors, action] = useFormState(
-    async (_: void | object, formData: FormData) => {
+    async (_: void | null | object, formData: FormData) => {
       const res = await updateUser(formData);
 
       if (res?.zodErrors) return { zodErrors: res.zodErrors };
@@ -43,7 +33,7 @@ function UpdateUserDataForm() {
       session.update();
       ref.current?.reset();
     },
-    initialErrorState,
+    null,
   );
 
   if (!session.data) return <Spinner />;
@@ -82,10 +72,10 @@ function UpdateUserDataForm() {
       </FormRow>
       <Input hidden id="userId" defaultValue={session.data.user.id} />
       <FormRow>
-        <Button type="reset" variation="secondary">
+        <Button ariaLabel="Reset" type="reset" variation="secondary">
           Cancel
         </Button>
-        <Button>Update account</Button>
+        <Button ariaLabel="Update account">Update account</Button>
       </FormRow>
     </Form>
   );

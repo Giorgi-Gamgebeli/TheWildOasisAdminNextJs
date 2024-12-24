@@ -13,7 +13,7 @@ type DashboardLayoutProps = {
   reservations: Prisma.ReservationsGetPayload<object>[] | undefined;
   stays:
     | ({
-        user: Prisma.UserGetPayload<object>;
+        user: { name: string };
       } & Prisma.ReservationsGetPayload<object>)[]
     | undefined;
   cabins: Prisma.CabinsGetPayload<object>[] | undefined;

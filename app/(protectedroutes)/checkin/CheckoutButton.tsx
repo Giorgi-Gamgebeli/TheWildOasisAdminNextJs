@@ -23,6 +23,7 @@ function CheckoutButton({ reservationId }: { reservationId: number }) {
     <Button
       variation="primary"
       size="small"
+      ariaLabel="Departing"
       onClick={() => handleCheckout(reservationId)}
       disabled={isCheckingout}
     >

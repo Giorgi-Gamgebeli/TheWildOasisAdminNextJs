@@ -13,7 +13,7 @@ function NotFound() {
         <Heading className="mb-[3.2rem]" as="h1">
           The page you are looking for could not be found 😢
         </Heading>
-        <Button onClick={() => router.back()} size="large">
+        <Button ariaLabel="Go back" onClick={() => router.back()} size="large">
           &larr; Go back
         </Button>
       </div>

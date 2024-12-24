@@ -8,7 +8,7 @@ import toast from "react-hot-toast";
 import { signup } from "../_lib/authActions";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { SignupSchema } from "../_schemas";
+import { SignupSchema } from "../_schemas/authSchemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTransition } from "react";
 
@@ -86,10 +86,12 @@ function SignupForm() {
       </FormRow>
 
       <FormRow>
-        <Button variation="secondary" type="reset">
+        <Button ariaLabel="Cancel" variation="secondary" type="reset">
           Cancel
         </Button>
-        <Button type="submit">Create new user</Button>
+        <Button ariaLabel="Submit" type="submit">
+          Create new user
+        </Button>
       </FormRow>
     </Form>
   );

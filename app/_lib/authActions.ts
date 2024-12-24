@@ -1,51 +1,31 @@
 "use server";
 
-import { Prisma } from "@prisma/client";
-import { SignupSchema, UpdatedUserSchema } from "../_schemas";
+import { SignupSchema, UpdatedUserSchema } from "../_schemas/authSchemas";
 import prisma from "./db";
 import { hash } from "bcryptjs";
 import supabase, { bucketUrl } from "./supabase";
 import { z } from "zod";
-import { EmailSchema, UserIdSchema } from "../_schemas/singleSchemas";
 import { isAuthenticated } from "../_utils/serverHelpers";
+import { UserSchemaDatabase } from "../_schemas/databaseSchemas";
 
-export async function getUserByEmail(email: string) {
+export async function createGuests(data: z.infer<typeof UserSchemaDatabase>[]) {
   try {
-    const result = EmailSchema.safeParse(email);
+    await isAuthenticated();
 
-    if (!result.success) throw new Error("Email failed in getUserByEmail");
+    const result = UserSchemaDatabase.safeParse(data);
 
-    const parsedEmail = result.data;
+    if (!result.success) throw new Error("Validation failed");
 
-    const user = await prisma.user.findUnique({
-      where: {
-        email: parsedEmail,
-      },
+    const parsedData = result.data;
+
+    const allGuestUsers = await prisma.user.createMany({
+      data: parsedData,
+      skipDuplicates: true,
     });
 
-    return user;
-  } catch {
-    return null;
-  }
-}
-
-export async function getUserById(id: string) {
-  try {
-    const result = UserIdSchema.safeParse(id);
-
-    if (!result.success) throw new Error("Id failed in getUserById");
-
-    const parsedId = result.data;
-
-    const user = await prisma.user.findUnique({
-      where: {
-        id: parsedId,
-      },
-    });
-
-    return user;
+    return allGuestUsers;
   } catch (error) {
-    return null;
+    console.error("Error creating guests:", error);
   }
 }
 
@@ -79,6 +59,66 @@ export async function signup(values: z.infer<typeof SignupSchema>) {
   } catch (error) {
     console.error(error);
     return { error: "Something went wrong" };
+  }
+}
+
+export async function getUserByEmail(
+  email: z.infer<typeof UserSchemaDatabase.shape.email>,
+) {
+  try {
+    const result = UserSchemaDatabase.shape.email.safeParse(email);
+
+    if (!result.success) throw new Error("Validation failed");
+
+    const parsedEmail = result.data;
+
+    const user = await prisma.user.findUnique({
+      where: {
+        email: parsedEmail,
+      },
+      select: {
+        email: true,
+      },
+    });
+
+    return user;
+  } catch {
+    return null;
+  }
+}
+
+export async function getAllGuests() {
+  try {
+    const allGuestUsers = await prisma.user.findMany({
+      where: { role: "GUEST" },
+      orderBy: { id: "asc" },
+    });
+
+    return allGuestUsers;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+export async function getUserById(
+  id: z.infer<typeof UserSchemaDatabase.shape.id>,
+) {
+  try {
+    const result = UserSchemaDatabase.shape.id.safeParse(id);
+
+    if (!result.success) throw new Error("Validation failed");
+
+    const parsedId = result.data;
+
+    const user = await prisma.user.findUnique({
+      where: {
+        id: parsedId,
+      },
+    });
+
+    return user;
+  } catch (error) {
+    return null;
   }
 }
 
@@ -139,38 +179,5 @@ export async function updateUser(formData: FormData) {
   } catch (error) {
     console.error(error);
     return { error: "Something went wrong" };
-  }
-}
-
-export async function getAllGuests() {
-  try {
-    const allGuestUsers = await prisma.user.findMany({
-      where: { role: "GUEST" },
-      orderBy: { id: "asc" },
-    });
-
-    return allGuestUsers;
-  } catch (error) {
-    console.error(error);
-  }
-}
-
-export async function createGuests(data: Prisma.UserCreateManyInput[]) {
-  try {
-    await isAuthenticated();
-    // const result = z.array(UserCreateManyInput).safeParse(data);
-
-    // if (!result.success) throw new Error("Data failed in createGuests");
-
-    // const parsedData = result.data;
-
-    const allGuestUsers = await prisma.user.createMany({
-      data: data,
-      skipDuplicates: true,
-    });
-
-    return allGuestUsers;
-  } catch (error) {
-    console.error("Error creating guests:", error);
   }
 }
