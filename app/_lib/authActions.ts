@@ -6,12 +6,22 @@ import prisma from "./db";
 import { hash } from "bcryptjs";
 import supabase, { bucketUrl } from "./supabase";
 import { z } from "zod";
+import { EmailSchema, UserIdSchema } from "../_schemas/singleSchemas";
+import { isAuthenticated } from "../_utils/serverHelpers";
 
 export async function getUserByEmail(email: string) {
   try {
+    await isAuthenticated();
+
+    const result = EmailSchema.safeParse(email);
+
+    if (!result.success) throw new Error("Email failed in getUserByEmail");
+
+    const parsedEmail = result.data;
+
     const user = await prisma.user.findUnique({
       where: {
-        email,
+        email: parsedEmail,
       },
     });
 
@@ -23,9 +33,17 @@ export async function getUserByEmail(email: string) {
 
 export async function getUserById(id: string) {
   try {
+    await isAuthenticated();
+
+    const result = UserIdSchema.safeParse(id);
+
+    if (!result.success) throw new Error("Id failed in getUserById");
+
+    const parsedId = result.data;
+
     const user = await prisma.user.findUnique({
       where: {
-        id,
+        id: parsedId,
       },
     });
 
@@ -46,6 +64,8 @@ export async function signup(values: z.infer<typeof SignupSchema>) {
   const { email, password, fullName } = result.data;
 
   try {
+    await isAuthenticated();
+
     const existingUser = await getUserByEmail(email);
 
     if (existingUser) return { error: "Email already in use" };
@@ -84,12 +104,14 @@ export async function updateUser(formData: FormData) {
 
   const { password, fullName, userId, avatar } = result.data;
 
-  // const fileBuffer =
-  //   avatar?.size !== 0 && avatar
-  //     ? Buffer.from(await avatar.arrayBuffer())
-  //     : null;
-
   try {
+    await isAuthenticated();
+
+    // const fileBuffer =
+    //   avatar?.size !== 0 && avatar
+    //     ? Buffer.from(await avatar.arrayBuffer())
+    //     : null;
+
     let imageUrl = null;
 
     if (avatar.size > 0) {
@@ -115,7 +137,7 @@ export async function updateUser(formData: FormData) {
       data: {
         name: fullName,
         password: hashedPassword,
-        image: imageUrl && `${bucketUrl}${imageUrl}`,
+        ...(imageUrl && { image: `${bucketUrl}${imageUrl}` }),
       },
     });
   } catch (error) {
@@ -126,6 +148,8 @@ export async function updateUser(formData: FormData) {
 
 export async function getAllGuests() {
   try {
+    await isAuthenticated();
+
     const allGuestUsers = await prisma.user.findMany({
       where: { role: "GUEST" },
       orderBy: { id: "asc" },
@@ -139,8 +163,15 @@ export async function getAllGuests() {
 
 export async function createGuests(data: Prisma.UserCreateManyInput[]) {
   try {
+    await isAuthenticated();
+    // const result = z.array(UserCreateManyInput).safeParse(data);
+
+    // if (!result.success) throw new Error("Data failed in createGuests");
+
+    // const parsedData = result.data;
+
     const allGuestUsers = await prisma.user.createMany({
-      data,
+      data: data,
       skipDuplicates: true,
     });
 

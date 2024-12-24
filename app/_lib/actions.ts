@@ -20,7 +20,6 @@ export async function login(formData: FormData) {
     await signIn("credentials", {
       email,
       password,
-      // redirectTo: DEFAULT_LOGIN_REDIRECT,
       redirect: false,
     });
   } catch (error) {

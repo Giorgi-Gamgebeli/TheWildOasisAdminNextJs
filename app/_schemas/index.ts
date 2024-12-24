@@ -1,9 +1,13 @@
 import { z } from "zod";
+import {
+  EmailSchema,
+  NameSchema,
+  PasswordConfirmSchema,
+  UserIdSchema,
+} from "./singleSchemas";
 
 export const LoginSchema = z.object({
-  email: z.string().email({
-    message: "Email is required",
-  }),
+  email: EmailSchema,
   password: z.string().min(1, {
     message: "Password is required",
   }),
@@ -11,27 +15,9 @@ export const LoginSchema = z.object({
 
 export const SignupSchema = z
   .object({
-    fullName: z
-      .string({
-        message: "Only text is allowed",
-      })
-      .min(1, {
-        message: "This field is required",
-      }),
+    fullName: NameSchema,
 
-    email: z
-      .string({
-        message: "Only text is allowed",
-      })
-      .min(1, {
-        message: "This field is required",
-      })
-      .email({
-        message: "Please provide a valid email address",
-      })
-      .regex(/\S+@\S+\.\S+/, {
-        message: "Please provide a valid email address",
-      }),
+    email: EmailSchema,
 
     password: z
       .string({
@@ -41,9 +27,7 @@ export const SignupSchema = z
         message: "Password needs a minimum of 8 characters",
       }),
 
-    passwordConfirm: z.string({
-      message: "Only text is allowed",
-    }),
+    passwordConfirm: PasswordConfirmSchema,
   })
   .superRefine(({ passwordConfirm, password }, ctx) => {
     if (passwordConfirm !== password) {
@@ -57,13 +41,7 @@ export const SignupSchema = z
 
 export const UpdatedUserSchema = z
   .object({
-    fullName: z
-      .string({
-        message: "Only text is allowed",
-      })
-      .min(1, {
-        message: "This field is required",
-      }),
+    fullName: NameSchema,
 
     password: z
       .string({
@@ -73,15 +51,13 @@ export const UpdatedUserSchema = z
         message: "Password needs a minimum of 8 characters",
       }),
 
-    passwordConfirm: z.string({
-      message: "Only text is allowed",
-    }),
+    passwordConfirm: PasswordConfirmSchema,
 
     avatar: z.instanceof(File).refine((file) => file.size <= 2 * 1024 * 1024, {
       message: "File size must be less than 2MB",
     }),
 
-    userId: z.string(),
+    userId: UserIdSchema,
   })
   .superRefine(({ passwordConfirm, password }, ctx) => {
     if (passwordConfirm !== password) {

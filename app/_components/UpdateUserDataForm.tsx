@@ -16,8 +16,11 @@ import { useRef } from "react";
 function UpdateUserDataForm() {
   const initialErrorState = {
     zodErrors: {
+      fullName: undefined,
       password: undefined,
       passwordConfirm: undefined,
+      avatar: undefined,
+      userId: undefined,
     },
   };
 
@@ -50,7 +53,7 @@ function UpdateUserDataForm() {
       <FormRow label="Email address">
         <Input defaultValue={session.data?.user.email} disabled />
       </FormRow>
-      <FormRow label="Full name" error={errors?.zodErrors?.fullName?.at(0)}>
+      <FormRow label="Full name" error={errors?.zodErrors.fullName?.at(0)}>
         <Input
           type="text"
           defaultValue={session.data?.user.name}
@@ -66,7 +69,7 @@ function UpdateUserDataForm() {
 
       <FormRow
         label="Confirm password"
-        error={errors?.zodErrors?.passwordConfirm?.at(0)}
+        error={errors?.zodErrors.passwordConfirm?.at(0)}
       >
         <Input
           type="password"
@@ -74,7 +77,7 @@ function UpdateUserDataForm() {
           id="passwordConfirm"
         />
       </FormRow>
-      <FormRow label="Avatar image">
+      <FormRow label="Avatar image" error={errors?.zodErrors.avatar?.at(0)}>
         <FileInput id="avatar" accept="image/*" />
       </FormRow>
       <Input hidden id="userId" defaultValue={session.data.user.id} />

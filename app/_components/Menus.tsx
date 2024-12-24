@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { HiEllipsisVertical } from "react-icons/hi2";
 import useOutsideClick from "../_hooks/useOutsideClick";
@@ -33,6 +33,19 @@ function Menus({ children }: { children: React.ReactNode }) {
 
   const close = () => setOpenId(null);
   const open = setOpenId;
+
+  useEffect(() => {
+    const handleScroll = () => {
+      close();
+    };
+
+    window.addEventListener("scroll", handleScroll, {
+      passive: true,
+      capture: true,
+    });
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   return (
     <MenusContext.Provider

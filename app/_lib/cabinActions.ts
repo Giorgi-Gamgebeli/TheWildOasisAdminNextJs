@@ -6,9 +6,12 @@ import { revalidatePath } from "next/cache";
 import { CreateCabinSchema, UpdateCabinSchema } from "../_schemas/cabinSchemas";
 import supabase, { bucketUrl } from "./supabase";
 import { createId } from "@paralleldrive/cuid2";
+import { isAuthenticated } from "../_utils/serverHelpers";
 
 export async function deleteCabins() {
   try {
+    await isAuthenticated();
+
     await prisma.cabins.deleteMany();
     revalidatePath("/cabins");
   } catch (error) {
@@ -16,8 +19,11 @@ export async function deleteCabins() {
   }
 }
 
+// TODO
 export async function createCabins(data: Prisma.CabinsCreateInput[]) {
   try {
+    await isAuthenticated();
+
     await prisma.cabins.createMany({
       data: data,
     });
@@ -29,6 +35,8 @@ export async function createCabins(data: Prisma.CabinsCreateInput[]) {
 
 export async function getAllCabins() {
   try {
+    await isAuthenticated();
+
     const allCabins = await prisma.cabins.findMany();
 
     return allCabins;
@@ -57,6 +65,8 @@ export async function createCabin(formData: FormData) {
   const { image, name, ...data } = result.data;
 
   try {
+    await isAuthenticated();
+
     const { data: bucketData, error } = await supabase.storage
       .from("images-bucket")
       .upload(`${name}${createId()}`, image);
@@ -98,15 +108,17 @@ export async function updateCabin(formData: FormData) {
 
   const { image, cabinId, name, ...data } = result.data;
 
-  const fileBuffer =
-    image?.size !== 0 && image
-      ? Buffer.from(await image.arrayBuffer())
-      : undefined;
+  // const fileBuffer =
+  //   image?.size !== 0 && image
+  //     ? Buffer.from(await image.arrayBuffer())
+  //     : undefined;
 
   try {
-    let imageUrl;
+    await isAuthenticated();
 
-    if (fileBuffer && image && image.size > 0) {
+    let imageUrl = null;
+
+    if (image && image.size > 0) {
       const { data: bucketData, error } = await supabase.storage
         .from("images-bucket")
         .upload(`${name}${createId()}`, image);
@@ -114,12 +126,6 @@ export async function updateCabin(formData: FormData) {
       if (error) throw new Error(error.message);
 
       imageUrl = bucketData.path;
-    } else {
-      const cabin = await prisma.cabins.findUnique({
-        where: { id: +cabinId },
-      });
-
-      imageUrl = cabin?.image;
     }
 
     await prisma.cabins.update({
@@ -127,7 +133,7 @@ export async function updateCabin(formData: FormData) {
       data: {
         ...data,
         name,
-        image: imageUrl,
+        ...(imageUrl && { image: `${bucketUrl}${imageUrl}` }),
       },
     });
 
@@ -138,8 +144,11 @@ export async function updateCabin(formData: FormData) {
   }
 }
 
+// TODO
 export async function duplicateCabin(cabinId: number) {
   try {
+    await isAuthenticated();
+
     const fetchedData = await prisma.cabins.findUnique({
       where: {
         id: cabinId,
@@ -147,7 +156,6 @@ export async function duplicateCabin(cabinId: number) {
     });
 
     if (!fetchedData) throw new Error("Can't find cabin");
-
 
     const { id: _, ...data } = fetchedData;
 
@@ -165,8 +173,11 @@ export async function duplicateCabin(cabinId: number) {
   }
 }
 
+// TODO
 export async function deleteCabin(id: number) {
   try {
+    await isAuthenticated();
+
     await prisma.cabins.delete({
       where: { id },
     });

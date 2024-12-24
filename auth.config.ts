@@ -3,6 +3,7 @@ import { compare } from "bcryptjs";
 import Credentials from "next-auth/providers/credentials";
 import { getUserByEmail } from "./app/_lib/authActions";
 import { LoginSchema } from "./app/_schemas";
+import prisma from "./app/_lib/db";
 
 export default {
   providers: [
@@ -14,12 +15,18 @@ export default {
 
         if (!result.success) return null;
 
-        const user = await getUserByEmail(credentials.email as string);
+        const { email, password } = result.data;
+
+        const user = await prisma.user.findUnique({
+          where: {
+            email,
+          },
+        });
 
         if (!user || !user.password) return null;
 
         const isPasswordValid = await compare(
-          credentials.password as string,
+          password as string,
           user.password as string,
         );
 

@@ -2,9 +2,12 @@
 
 import { revalidatePath } from "next/cache";
 import prisma from "./db";
+import { isAuthenticated } from "../_utils/serverHelpers";
 
 export async function updateSettings(value: number, field: string) {
   try {
+    await isAuthenticated();
+
     await prisma.settings.update({
       where: { id: 1 },
       data: {
@@ -21,6 +24,8 @@ export async function updateSettings(value: number, field: string) {
 
 export async function getSettings() {
   try {
+    await isAuthenticated();
+
     const settings = await prisma.settings.findUnique({
       where: { id: 1 },
     });
