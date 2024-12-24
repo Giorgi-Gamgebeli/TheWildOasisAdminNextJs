@@ -1,7 +1,7 @@
 import NextAuth, { Session } from "next-auth";
 import authConfig from "./auth.config";
 import {
-  // DEFAULT_LOGIN_REDIRECT,
+  DEFAULT_LOGIN_REDIRECT,
   apiAuthPrefix,
   authRoutes,
   publicRoutes,
@@ -23,13 +23,13 @@ export default middleware(
 
     if (isAuthRoute) {
       if (isLoggedIn) {
-        // return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
+        return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
       }
       return;
     }
 
     if (!isLoggedIn && !isPublicRoute) {
-      // return Response.redirect(new URL("/", nextUrl));
+      return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
     }
 
     return;
