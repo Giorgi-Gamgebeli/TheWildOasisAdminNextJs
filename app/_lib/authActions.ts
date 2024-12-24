@@ -64,8 +64,6 @@ export async function signup(values: z.infer<typeof SignupSchema>) {
   const { email, password, fullName } = result.data;
 
   try {
-    await isAuthenticated();
-
     const existingUser = await getUserByEmail(email);
 
     if (existingUser) return { error: "Email already in use" };
@@ -148,8 +146,6 @@ export async function updateUser(formData: FormData) {
 
 export async function getAllGuests() {
   try {
-    await isAuthenticated();
-
     const allGuestUsers = await prisma.user.findMany({
       where: { role: "GUEST" },
       orderBy: { id: "asc" },

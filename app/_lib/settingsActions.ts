@@ -24,8 +24,6 @@ export async function updateSettings(value: number, field: string) {
 
 export async function getSettings() {
   try {
-    await isAuthenticated();
-
     const settings = await prisma.settings.findUnique({
       where: { id: 1 },
     });
