@@ -11,8 +11,6 @@ import { isAuthenticated } from "../_utils/serverHelpers";
 
 export async function getUserByEmail(email: string) {
   try {
-    await isAuthenticated();
-
     const result = EmailSchema.safeParse(email);
 
     if (!result.success) throw new Error("Email failed in getUserByEmail");
@@ -33,8 +31,6 @@ export async function getUserByEmail(email: string) {
 
 export async function getUserById(id: string) {
   try {
-    await isAuthenticated();
-
     const result = UserIdSchema.safeParse(id);
 
     if (!result.success) throw new Error("Id failed in getUserById");
@@ -64,6 +60,8 @@ export async function signup(values: z.infer<typeof SignupSchema>) {
   const { email, password, fullName } = result.data;
 
   try {
+    await isAuthenticated();
+
     const existingUser = await getUserByEmail(email);
 
     if (existingUser) return { error: "Email already in use" };
