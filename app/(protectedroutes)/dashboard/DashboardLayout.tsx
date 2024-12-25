@@ -34,6 +34,7 @@ function DashboardLayout({
   const numDays = !lastFromURL ? 7 : +lastFromURL;
 
   const queryDate = subDays(new Date(), numDays).toISOString();
+
   const reservationsAfterDate = reservations.filter((reservation) => {
     const reservationDate = new Date(reservation.createdAt);
 
@@ -53,7 +54,7 @@ function DashboardLayout({
   });
 
   const confirmedStays = staysAfterDate?.filter(
-    (stay) => stay.status === "checked-in" || stay.status === "checked-out",
+    (stay) => stay.status !== "unconfirmed",
   );
 
   return (

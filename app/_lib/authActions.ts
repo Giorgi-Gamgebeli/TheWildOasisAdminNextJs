@@ -12,7 +12,7 @@ export async function createGuests(data: z.infer<typeof UserSchemaDatabase>[]) {
   try {
     await isAuthenticated();
 
-    const result = UserSchemaDatabase.safeParse(data);
+    const result = z.array(UserSchemaDatabase).safeParse(data);
 
     if (!result.success) throw new Error("Validation failed");
 

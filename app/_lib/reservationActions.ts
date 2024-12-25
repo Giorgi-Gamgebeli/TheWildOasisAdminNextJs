@@ -14,7 +14,7 @@ import {
 export async function createDummyReservations(
   data: z.infer<typeof ReservationWithoutId>[],
 ) {
-  const result = ReservationWithoutId.safeParse(data);
+  const result = z.array(ReservationWithoutId).safeParse(data);
 
   try {
     await isAuthenticated();

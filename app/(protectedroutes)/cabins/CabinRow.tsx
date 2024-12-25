@@ -12,7 +12,21 @@ import { Prisma } from "@prisma/client";
 import { deleteCabin, duplicateCabin } from "@/app/_lib/cabinActions";
 import toast from "react-hot-toast";
 
-function CabinRow({ cabin }: { cabin: Prisma.CabinsGetPayload<object> }) {
+type CabinRowProps = {
+  cabin: Prisma.CabinsGetPayload<object>;
+  // actionOptmisticCabins: (action: {
+  //   name: string;
+  //   id: number;
+  //   createdAt: Date;
+  //   maxCapacity: number;
+  //   regularPrice: number;
+  //   discount: number;
+  //   description: string;
+  //   image: string;
+  // }) => void;
+};
+
+function CabinRow({ cabin }: CabinRowProps) {
   const {
     id: cabinId,
     name,
@@ -23,11 +37,13 @@ function CabinRow({ cabin }: { cabin: Prisma.CabinsGetPayload<object> }) {
   } = cabin;
 
   async function handleDuplicate() {
+    //   actionOptmisticCabins({ ...cabin, name: `Copy of ${name}` });
+
     const res = await duplicateCabin(cabinId);
 
-    if (res?.error) return toast.error(res.error);
-
     toast.success("Cabin successfully duplicated!");
+
+    if (res?.error) return toast.error(res.error);
   }
 
   return (
@@ -81,7 +97,13 @@ function CabinRow({ cabin }: { cabin: Prisma.CabinsGetPayload<object> }) {
             <Modal.Window name="delete">
               <ConfirmDelete
                 resourceName="cabins"
-                onConfirm={() => deleteCabin(cabinId)}
+                onConfirm={async () => {
+                  const res = await deleteCabin(cabinId);
+
+                  if (res?.error) return toast.error(res?.error);
+
+                  toast.success("Cabin successfully deleted");
+                }}
               />
             </Modal.Window>
           </Menus.Menu>

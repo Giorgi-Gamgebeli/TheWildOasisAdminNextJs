@@ -12,7 +12,7 @@ import { CabinsSchemaDatabase } from "../_schemas/databaseSchemas";
 export async function createCabins(
   data: z.infer<typeof CabinsSchemaDatabase>[],
 ) {
-  const result = CabinsSchemaDatabase.safeParse(data);
+  const result = z.array(CabinsSchemaDatabase).safeParse(data);
 
   try {
     await isAuthenticated();
@@ -58,7 +58,6 @@ export async function duplicateCabin(
         name: `Copy of ${data.name}`,
       },
     });
-
     revalidatePath("/cabins");
   } catch (error) {
     console.error(error);
@@ -138,7 +137,6 @@ export async function updateCabin(formData: FormData) {
     };
 
   const { image, cabinId, name, ...data } = result.data;
-
   // const fileBuffer =
   //   image?.size !== 0 && image
   //     ? Buffer.from(await image.arrayBuffer())

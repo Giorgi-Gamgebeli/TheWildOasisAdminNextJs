@@ -6,7 +6,7 @@ import { getAllReservations, getAllStays } from "@/app/_lib/reservationActions";
 import { getAllCabins } from "@/app/_lib/cabinActions";
 import TodayActivity from "./TodayActivity";
 
-export const revalidate = 12 * 60 * 60;
+export const revalidate = 6 * 60 * 60;
 
 async function Page() {
   const reservations = await getAllReservations();
