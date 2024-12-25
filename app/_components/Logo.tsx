@@ -18,6 +18,7 @@ function Logo() {
           src={src}
           className="aspect-[3/2] h-[10rem] w-auto object-contain"
           alt="Wild oasis logo"
+          quality={50}
           sizes="20vw"
         />
       </div>
