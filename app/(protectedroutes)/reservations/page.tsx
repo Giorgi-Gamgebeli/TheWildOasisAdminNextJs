@@ -17,10 +17,10 @@ export const metadata: Metadata = {
     "giorgi gamgebeli",
     "react",
     "nextjs",
-    "the wild oasis reservation page",
+    "the wild oasis reservations page",
     "the wild oasis admin",
     "the wild oasis admin side",
-    "the wild oasis admin side reservation page",
+    "the wild oasis admin side reservations page",
   ],
   openGraph: {
     title: "Reservations",
