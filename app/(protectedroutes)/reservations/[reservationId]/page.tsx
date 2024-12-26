@@ -29,7 +29,29 @@ export async function generateMetadata({
 
   return {
     title: `Reservation ${params.reservationId}`,
-    description: `${reservation?.user.name}'s reservation in cabin ${reservation?.cabin.name}`,
+    description: `Web application tailored for hotel staff to track customer payments and manage guest stays. Packed with advanced features. ${reservation?.user.name}'s reservation in cabin ${reservation?.cabin.name}`,
+
+    openGraph: {
+      title: `Reservation ${params.reservationId}`,
+      description: `Web application tailored for hotel staff to track customer payments and manage guest stays. Packed with advanced features. ${reservation?.user.name}'s reservation in cabin ${reservation?.cabin.name}`,
+      url: `${process.env.NEXT_PUBLIC_BASE_URL}/reservations/${reservation?.id}`,
+      siteName: "The Wild Oasis admin side | Giorgi Gamgebeli",
+      locale: "en-US",
+      type: "website",
+    },
+    robots: {
+      index: true,
+      follow: true,
+      nocache: false,
+      googleBot: {
+        index: true,
+        "max-image-preview": "large",
+      },
+    },
+    category: "web development",
+    twitter: {
+      card: "summary_large_image",
+    },
   };
 }
 

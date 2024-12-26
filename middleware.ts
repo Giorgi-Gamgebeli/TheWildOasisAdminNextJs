@@ -1,3 +1,38 @@
+/*
+const googleBotIps = [
+  "66.249.64.0/19",
+  "64.233.160.0/19",
+  "72.14.192.0/18",
+  "74.125.0.0/16",
+  "209.85.128.0/17",
+];
+
+const bingBotIps = ["13.64.0.0/11", "40.77.0.0/16", "204.79.197.0/24"];
+
+const yandexBotIps = ["5.255.255.0/24", "77.88.0.0/16", "95.108.0.0/16"];
+
+const ip = req.headers.get("x-forwarded-for");
+
+const response = NextResponse.next();
+response.cookies.set("client-ip", ip || "unkown", {
+  httpOnly: false,
+  secure: process.env.NODE_ENV === "production",
+  path: "/",
+});
+
+const isGoogleBot = ipRangeCheck(ip, googleBotIps);
+const isBingBot = ipRangeCheck(ip, bingBotIps);
+const isYandexBot = ipRangeCheck(ip, yandexBotIps);
+
+if (isGoogleBot || isBingBot || isYandexBot) return;
+import ipRangeCheck from "ip-range-check";
+import requestIp from "request-ip";
+const isCrawler =
+  /Googlebot|Bingbot|Slurp|DuckDuckBot|YandexBot|Baiduspider|Sogou|Exabot|facebot|ia_archiver/.test(
+    userAgent,
+  );
+*/
+
 import NextAuth, { Session } from "next-auth";
 import authConfig from "./auth.config";
 import {
@@ -6,48 +41,16 @@ import {
   authRoutes,
   publicRoutes,
 } from "@/routes";
-import { NextRequest, NextResponse } from "next/server";
-// import ipRangeCheck from "ip-range-check";
-// import requestIp from "request-ip";
+import { NextRequest } from "next/server";
 
 const { auth: middleware } = NextAuth(authConfig);
 
-// const googleBotIps = [
-//   "66.249.64.0/19",
-//   "64.233.160.0/19",
-//   "72.14.192.0/18",
-//   "74.125.0.0/16",
-//   "209.85.128.0/17",
-// ];
-
-// const bingBotIps = ["13.64.0.0/11", "40.77.0.0/16", "204.79.197.0/24"];
-
-// const yandexBotIps = ["5.255.255.0/24", "77.88.0.0/16", "95.108.0.0/16"];
-
 export default middleware(
   (req: NextRequest & { auth: Session | null }): Response | void => {
-    const ip = req.headers.get("x-forwarded-for");
+    const userAgent = req.headers.get("user-agent") || "";
+    const isCrawler = /Googlebot|Bingbot|YandexBot/.test(userAgent);
 
-    const response = NextResponse.next();
-    response.cookies.set("client-ip", ip || "unkown", {
-      httpOnly: false,
-      secure: process.env.NODE_ENV === "production",
-      path: "/",
-    });
-
-    // const isGoogleBot = ipRangeCheck(ip, googleBotIps);
-    // const isBingBot = ipRangeCheck(ip, bingBotIps);
-    // const isYandexBot = ipRangeCheck(ip, yandexBotIps);
-
-    // if (isGoogleBot || isBingBot || isYandexBot) return;
-
-    // const userAgent = req.headers.get("user-agent") || "";
-    // const isCrawler =
-    //   /Googlebot|Bingbot|Slurp|DuckDuckBot|YandexBot|Baiduspider|Sogou|Exabot|facebot|ia_archiver/.test(
-    //     userAgent,
-    //   );
-
-    // if (isCrawler) return;
+    if (isCrawler) return;
 
     const { nextUrl } = req;
     const isLoggedIn = !!req.auth;

@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { FileImageSchema, PasswordConfirmSchema, UserIdSchema } from "./index";
+import { FileImageSchema, PasswordConfirmSchema } from "./index";
 import { UserSchemaDatabase } from "./databaseSchemas";
 
 export const LoginSchema = z.object({
@@ -56,7 +56,7 @@ export const UpdatedUserSchema = z
 
     avatar: FileImageSchema,
 
-    userId: UserIdSchema,
+    userId: UserSchemaDatabase.shape.id,
   })
   .superRefine(({ passwordConfirm, password }, ctx) => {
     if (passwordConfirm !== password) {

@@ -5,8 +5,6 @@ export const PasswordConfirmSchema = z.string({
   message: "Only text is allowed",
 });
 
-export const UserIdSchema = z.string();
-
 export const FileImageSchema = z
   .instanceof(File)
   .refine((file) => file?.size <= MAX_FILE_SIZE, `Max image size is 2MB`)

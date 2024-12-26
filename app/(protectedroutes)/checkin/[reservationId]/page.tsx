@@ -5,6 +5,42 @@ import {
   getReservation,
 } from "@/app/_lib/reservationActions";
 import CheckinReservation from "./CheckinReservation";
+import { Metadata } from "next";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Params;
+}): Promise<Metadata> {
+  const reservation = await getReservation(+params.reservationId);
+
+  return {
+    title: `Check in reservation ${params.reservationId}`,
+    description: `Web application tailored for hotel staff to track customer payments and manage guest stays. Packed with advanced features. To check in guest ${reservation?.user.name} in cabin ${reservation?.cabin.name}`,
+
+    openGraph: {
+      title: `Check in reservation ${params.reservationId}`,
+      description: `Web application tailored for hotel staff to track customer payments and manage guest stays. Packed with advanced features. To check in guest ${reservation?.user.name} in cabin ${reservation?.cabin.name}`,
+      url: `${process.env.NEXT_PUBLIC_BASE_URL}/checkin/${reservation?.id}`,
+      siteName: "The Wild Oasis admin side | Giorgi Gamgebeli",
+      locale: "en-US",
+      type: "website",
+    },
+    robots: {
+      index: true,
+      follow: true,
+      nocache: false,
+      googleBot: {
+        index: true,
+        "max-image-preview": "large",
+      },
+    },
+    category: "web development",
+    twitter: {
+      card: "summary_large_image",
+    },
+  };
+}
 
 type Params = {
   reservationId: string;

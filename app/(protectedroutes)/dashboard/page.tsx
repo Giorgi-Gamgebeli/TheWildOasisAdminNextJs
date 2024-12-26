@@ -11,6 +11,41 @@ export const revalidate = 6 * 60 * 60;
 
 export const metadata: Metadata = {
   title: "Dashboard",
+
+  description:
+    "Web application tailored for hotel staff to track customer payments and manage guest stays. Packed with advanced features. Page for dashboard.",
+  keywords: [
+    "frontend",
+    "giorgi gamgebeli",
+    "react",
+    "nextjs",
+    "the wild oasis dashboard page",
+    "the wild oasis admin",
+    "the wild oasis admin side",
+    "the wild oasis admin side dashboard page",
+  ],
+  openGraph: {
+    title: "Dashboard",
+    description:
+      "Web application tailored for hotel staff to track customer payments and manage guest stays. Packed with advanced features. Page for dashboard.",
+    url: `${process.env.NEXT_PUBLIC_BASE_URL}/dashboard`,
+    siteName: "The Wild Oasis admin side | Giorgi Gamgebeli",
+    locale: "en-US",
+    type: "website",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    nocache: false,
+    googleBot: {
+      index: true,
+      "max-image-preview": "large",
+    },
+  },
+  category: "web development",
+  twitter: {
+    card: "summary_large_image",
+  },
 };
 
 async function Page() {
