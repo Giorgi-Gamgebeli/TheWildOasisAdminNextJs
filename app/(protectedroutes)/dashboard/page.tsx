@@ -5,8 +5,13 @@ import Row from "../../_components/Row";
 import { getAllReservations, getAllStays } from "@/app/_lib/reservationActions";
 import { getAllCabins } from "@/app/_lib/cabinActions";
 import TodayActivity from "./TodayActivity";
+import { Metadata } from "next";
 
 export const revalidate = 6 * 60 * 60;
+
+export const metadata: Metadata = {
+  title: "Dashboard",
+};
 
 async function Page() {
   const reservations = await getAllReservations();

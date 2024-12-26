@@ -20,6 +20,7 @@
     "@supabase/supabase-js": "^2.43.1",
     "bcryptjs": "^2.4.3",
     "date-fns": "^3.6.0",
+    "ip-range-check": "^0.2.0",
     "next": "^14.2.15",
     "next-auth": "^5.0.0-beta.25",
     "react": "^18",
@@ -28,6 +29,7 @@
     "react-hot-toast": "^2.4.1",
     "react-icons": "^5.2.1",
     "recharts": "^2.13.0-alpha.4",
+    "request-ip": "^3.3.0",
     "server-only": "^0.0.1",
     "sharp": "^0.33.5",
     "zod": "^3.24.1"
@@ -37,6 +39,7 @@
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "@types/request-ip": "^0.0.41",
     "eslint": "^8",
     "eslint-config-next": "14.2.11",
     "postcss": "^8",

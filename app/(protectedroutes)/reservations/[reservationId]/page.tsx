@@ -3,6 +3,7 @@ import {
   getReservation,
 } from "@/app/_lib/reservationActions";
 import ReservationDetail from "../ReservationDetail";
+import { Metadata } from "next";
 
 type Params = {
   reservationId: string;
@@ -17,6 +18,19 @@ export async function generateStaticParams() {
     })) || [];
 
   return ids;
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Params;
+}): Promise<Metadata> {
+  const reservation = await getReservation(+params.reservationId);
+
+  return {
+    title: `Reservation ${params.reservationId}`,
+    description: `${reservation?.user.name}'s reservation in cabin ${reservation?.cabin.name}`,
+  };
 }
 
 async function Page({ params }: { params: Params }) {

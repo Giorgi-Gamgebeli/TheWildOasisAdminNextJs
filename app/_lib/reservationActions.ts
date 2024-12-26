@@ -102,6 +102,7 @@ export async function getAllReservations() {
     return reservations;
   } catch (error) {
     console.error(error);
+    return [];
   }
 }
 
