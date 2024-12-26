@@ -13,6 +13,7 @@ import {
   createDummyReservations,
   deleteReservations,
 } from "../_lib/reservationActions";
+import { revalidatePath } from "next/cache";
 
 async function createReservations() {
   try {
@@ -96,6 +97,9 @@ function Uploader() {
 
     await deleteReservations();
     await createReservations();
+
+    revalidatePath("/dashboard");
+    revalidatePath("/reservations");
   }
 
   return (

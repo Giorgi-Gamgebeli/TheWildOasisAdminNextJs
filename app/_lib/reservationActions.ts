@@ -190,6 +190,7 @@ export async function updateCheckout(
     });
 
     revalidatePath("/dashboard");
+    revalidatePath("/reservations");
   } catch (error) {
     console.error(error);
     return { error: "There was an error while checking out" };
@@ -212,6 +213,9 @@ export async function updateCheckin(data: z.infer<typeof UpdateCheckinSchema>) {
       },
       data: { hasBreakfast, extrasPrice, totalPrice, status: "checked-in" },
     });
+
+    revalidatePath("/dashboard");
+    revalidatePath("/reservations");
   } catch (error) {
     console.error(error);
     return { error: "There was an error while checking in" };
