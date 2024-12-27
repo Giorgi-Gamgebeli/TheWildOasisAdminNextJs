@@ -29,11 +29,20 @@ export async function generateMetadata({
 
   return {
     title: `Reservation ${params.reservationId}`,
+    icons: {
+      icon: "/app/icon.png",
+    },
     description: `Web application tailored for hotel staff to track customer payments and manage guest stays. Packed with advanced features. ${reservation?.user.name}'s reservation in cabin ${reservation?.cabin.name}`,
 
     openGraph: {
       title: `Reservation ${params.reservationId}`,
       description: `Web application tailored for hotel staff to track customer payments and manage guest stays. Packed with advanced features. ${reservation?.user.name}'s reservation in cabin ${reservation?.cabin.name}`,
+      images: [
+        {
+          url: "/reservations.png",
+          alt: "The Wild Oasis Admin Dashboard",
+        },
+      ],
       url: `${process.env.NEXT_PUBLIC_BASE_URL}/reservations/${reservation?.id}`,
       siteName: "The Wild Oasis admin side | Giorgi Gamgebeli",
       locale: "en-US",
@@ -51,6 +60,9 @@ export async function generateMetadata({
     category: "web development",
     twitter: {
       card: "summary_large_image",
+      title: "The Wild Oasis admin side | Giorgi Gamgebeli",
+      description: `Web application tailored for hotel staff to track customer payments and manage guest stays. Packed with advanced features. ${reservation?.user.name}'s reservation in cabin ${reservation?.cabin.name}`,
+      images: ["/reservations.png"],
     },
   };
 }

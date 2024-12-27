@@ -10,6 +10,9 @@ export const revalidate = 6 * 60 * 60;
 export const metadata: Metadata = {
   title: "Reservations",
 
+  icons: {
+    icon: "/app/icon.png",
+  },
   description:
     "Web application tailored for hotel staff to track customer payments and manage guest stays. Packed with advanced features. Page to check new reservations.",
   keywords: [
@@ -24,6 +27,13 @@ export const metadata: Metadata = {
   ],
   openGraph: {
     title: "Reservations",
+
+    images: [
+      {
+        url: "/reservations.png",
+        alt: "The Wild Oasis Admin Dashboard",
+      },
+    ],
     description:
       "Web application tailored for hotel staff to track customer payments and manage guest stays. Packed with advanced features. Page to check new reservations.",
     url: `${process.env.NEXT_PUBLIC_BASE_URL}/reservations`,
@@ -43,6 +53,10 @@ export const metadata: Metadata = {
   category: "web development",
   twitter: {
     card: "summary_large_image",
+    title: "The Wild Oasis admin side | Giorgi Gamgebeli",
+    description:
+      "Web application tailored for hotel staff to track customer payments and manage guest stays. Packed with advanced features. Page to check new reservations.",
+    images: ["/reservations.png"],
   },
 };
 

@@ -10,6 +10,42 @@
     border 0.3s;
 }
 
+html {
+  ::-webkit-scrollbar {
+    width: 12px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #e5e7eb;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #9ca3af;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #6b7280;
+  }
+}
+
+html.dark {
+  ::-webkit-scrollbar {
+    width: 12px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #3f3f46;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #1f2937;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #111827;
+  }
+}
+
 .FormRow:has(button) {
   display: flex;
   justify-content: flex-end;

@@ -7,6 +7,9 @@ import { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Change settings",
 
+  icons: {
+    icon: "/app/icon.png",
+  },
   description:
     "Web application tailored for hotel staff to track customer payments and manage guest stays. Packed with advanced features. Page for changing settings",
   keywords: [
@@ -21,8 +24,15 @@ export const metadata: Metadata = {
   ],
   openGraph: {
     title: "Change settings",
+
+    images: [
+      {
+        url: "/settings.png",
+        alt: "The Wild Oasis Admin Dashboard",
+      },
+    ],
     description:
-      "Web application tailored for hotel staff to track customer payments and manage guest stays. Packed with advanced features. Page for changing settings",
+      "Web application tailored for hotel staff to track customer payments and manage guest stays. Packed with advanced features. Page for changing settings.",
     url: `${process.env.NEXT_PUBLIC_BASE_URL}/settings`,
     siteName: "The Wild Oasis admin side | Giorgi Gamgebeli",
     locale: "en-US",
@@ -40,6 +50,10 @@ export const metadata: Metadata = {
   category: "web development",
   twitter: {
     card: "summary_large_image",
+    title: "The Wild Oasis admin side | Giorgi Gamgebeli",
+    description:
+      "Web application tailored for hotel staff to track customer payments and manage guest stays. Packed with advanced features. Page for changing settings.",
+    images: ["/settings.png"],
   },
 };
 

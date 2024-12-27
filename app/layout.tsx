@@ -25,6 +25,9 @@ export const metadata: Metadata = {
     default: "The Wild Oasis admin side | Giorgi Gamgebeli",
     template: "%s | The Wild Oasis",
   },
+  icons: {
+    icon: "/app/icon.png",
+  },
   description:
     "Web application tailored for hotel staff to track customer payments and manage guest stays. Packed with advanced features.",
   keywords: [
@@ -43,11 +46,18 @@ export const metadata: Metadata = {
     },
     description:
       "Web application tailored for hotel staff to track customer payments and manage guest stays. Packed with advanced features.",
+    images: [
+      {
+        url: "/dashboard.png",
+        alt: "The Wild Oasis Admin Dashboard",
+      },
+    ],
     url: process.env.NEXT_PUBLIC_BASE_URL,
     siteName: "The Wild Oasis admin side | Giorgi Gamgebeli",
     locale: "en-US",
     type: "website",
   },
+
   robots: {
     index: true,
     follow: true,
@@ -58,8 +68,13 @@ export const metadata: Metadata = {
     },
   },
   category: "web development",
+
   twitter: {
     card: "summary_large_image",
+    title: "The Wild Oasis admin side | Giorgi Gamgebeli",
+    description:
+      "Web application tailored for hotel staff to track customer payments and manage guest stays. Packed with advanced features.",
+    images: ["/dashboard.png"],
   },
 };
 

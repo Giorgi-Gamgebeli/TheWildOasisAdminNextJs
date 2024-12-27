@@ -6,6 +6,9 @@ import UpdateUserDateForm from "../../_components/UpdateUserDataForm";
 export const metadata: Metadata = {
   title: "Account",
 
+  icons: {
+    icon: "/app/icon.png",
+  },
   description:
     "Web application tailored for hotel staff to track customer payments and manage guest stays. Packed with advanced features. Page to configure your user account.",
   keywords: [
@@ -20,6 +23,12 @@ export const metadata: Metadata = {
   ],
   openGraph: {
     title: "Account",
+    images: [
+      {
+        url: "/account.png",
+        alt: "The Wild Oasis Admin Dashboard",
+      },
+    ],
     description:
       "Web application tailored for hotel staff to track customer payments and manage guest stays. Packed with advanced features. Page to configure your user account.",
     url: `${process.env.NEXT_PUBLIC_BASE_URL}/account`,
@@ -39,6 +48,10 @@ export const metadata: Metadata = {
   category: "web development",
   twitter: {
     card: "summary_large_image",
+    title: "The Wild Oasis admin side | Giorgi Gamgebeli",
+    description:
+      "Web application tailored for hotel staff to track customer payments and manage guest stays. Packed with advanced features. Page to configure your user account.",
+    images: ["/account.png"],
   },
 };
 
