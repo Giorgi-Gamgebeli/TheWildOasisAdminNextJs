@@ -30,7 +30,7 @@ export async function generateMetadata({
   return {
     title: `Reservation ${params.reservationId}`,
     icons: {
-      icon: "/app/icon.png",
+      icon: "/favicon.png",
     },
     description: `Web application tailored for hotel staff to track customer payments and manage guest stays. Packed with advanced features. ${reservation?.user.name}'s reservation in cabin ${reservation?.cabin.name}`,
 

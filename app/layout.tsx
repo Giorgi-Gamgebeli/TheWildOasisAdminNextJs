@@ -26,7 +26,7 @@ export const metadata: Metadata = {
     template: "%s | The Wild Oasis",
   },
   icons: {
-    icon: "/app/icon.png",
+    icon: "/favicon.png",
   },
   description:
     "Web application tailored for hotel staff to track customer payments and manage guest stays. Packed with advanced features.",
