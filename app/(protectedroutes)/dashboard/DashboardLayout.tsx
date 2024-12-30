@@ -10,19 +10,17 @@ import Empty from "@/app/_components/Empty";
 import { getToday } from "@/app/_utils/helpers";
 
 type DashboardLayoutProps = {
-  stays:
-    | ({
-        user: { name: string };
-      } & Prisma.ReservationsGetPayload<object>)[]
-    | undefined;
-  cabins: Prisma.CabinsGetPayload<object>[] | undefined;
+  stays: ({
+    user: { name: string };
+  } & Prisma.ReservationsGetPayload<object>)[];
+  cabins: Prisma.CabinsGetPayload<object>[];
   children: React.ReactNode;
 };
 
 function DashboardLayout({ stays, cabins, children }: DashboardLayoutProps) {
   const searchParams = useSearchParams();
 
-  if (!stays) return <Empty resourceName="data" />;
+  if (!stays.length || !cabins.length) return <Empty resourceName="data" />;
 
   const lastFromURL = searchParams.get("last");
   const numDays = !lastFromURL ? 7 : +lastFromURL;
@@ -30,9 +28,7 @@ function DashboardLayout({ stays, cabins, children }: DashboardLayoutProps) {
   const queryDate = subDays(new Date(), numDays).toISOString();
 
   const { reservationsAfterDate, confirmedStays } = stays.reduce<{
-    confirmedStays: ({
-      user: { name: string };
-    } & Prisma.ReservationsGetPayload<object>)[];
+    confirmedStays: DashboardLayoutProps["stays"];
     reservationsAfterDate: Prisma.ReservationsGetPayload<object>[];
   }>(
     (acc, stay) => {
@@ -44,10 +40,7 @@ function DashboardLayout({ stays, cabins, children }: DashboardLayoutProps) {
         reservationDate >= new Date(queryDate) &&
         reservationDate <= new Date(getToday({ end: true }))
       ) {
-        acc["reservationsAfterDate"] = [
-          ...acc.reservationsAfterDate,
-          reservation,
-        ];
+        acc.reservationsAfterDate = [...acc.reservationsAfterDate, reservation];
       }
 
       if (
@@ -55,7 +48,7 @@ function DashboardLayout({ stays, cabins, children }: DashboardLayoutProps) {
         stayDate <= new Date(getToday({ end: true })) &&
         stay.status !== "unconfirmed"
       ) {
-        acc["confirmedStays"] = [...acc.confirmedStays, stay];
+        acc.confirmedStays = [...acc.confirmedStays, stay];
       }
 
       return acc;

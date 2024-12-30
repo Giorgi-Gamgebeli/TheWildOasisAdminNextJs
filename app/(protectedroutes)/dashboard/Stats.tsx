@@ -6,21 +6,12 @@ import {
 } from "react-icons/hi2";
 import Stat from "./Stat";
 import { formatCurrency } from "../../_utils/helpers";
+import { Prisma } from "@prisma/client";
 
 type StatsProps = {
-  confirmedStays:
-    | {
-        id: number;
-        startDate: Date;
-        numNights: number | null;
-        totalPrice: number | null;
-        status: string | null;
-        extrasPrice: number | null;
-        user: {
-          name: string;
-        };
-      }[]
-    | undefined;
+  confirmedStays: ({
+    user: { name: string };
+  } & Prisma.ReservationsGetPayload<object>)[];
 
   reservations:
     | {

@@ -14,7 +14,7 @@ async function TodayActivity() {
       </Row>
 
       {activities ? (
-        activities?.length > 0 ? (
+        activities.length > 0 ? (
           <ul
             style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
             className="overflow-scroll overflow-x-hidden"

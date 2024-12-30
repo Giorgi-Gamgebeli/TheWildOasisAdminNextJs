@@ -10,6 +10,7 @@ import {
   Tooltip,
 } from "recharts";
 import { useDarkMode } from "../../_context/DarkModeContext";
+import { Prisma } from "@prisma/client";
 
 const startDataLight = [
   {
@@ -130,19 +131,9 @@ function prepareData(
 }
 
 type DurationChartProps = {
-  confirmedStays:
-    | {
-        id: number;
-        startDate: Date;
-        numNights: number | null;
-        totalPrice: number | null;
-        status: string | null;
-        extrasPrice: number | null;
-        user: {
-          name: string;
-        };
-      }[]
-    | undefined;
+  confirmedStays: ({
+    user: { name: string };
+  } & Prisma.ReservationsGetPayload<object>)[];
 };
 
 function DurationChart({ confirmedStays }: DurationChartProps) {

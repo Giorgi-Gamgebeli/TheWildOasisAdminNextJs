@@ -126,6 +126,7 @@ export async function getAllStays() {
     return stays;
   } catch (error) {
     console.error(error);
+    return [];
   }
 }
 
@@ -165,6 +166,7 @@ export async function getStaysTodayActivity() {
     return activities;
   } catch (error) {
     console.error(error);
+    return [];
   }
 }
 

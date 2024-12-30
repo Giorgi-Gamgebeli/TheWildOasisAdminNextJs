@@ -115,6 +115,7 @@ export async function getAllCabins() {
     return allCabins;
   } catch (error) {
     console.error(error);
+    return [];
   }
 }
 
