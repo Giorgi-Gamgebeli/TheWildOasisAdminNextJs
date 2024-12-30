@@ -9,24 +9,15 @@ import Table from "../../_components/Table";
 import Menus from "../../_components/Menus";
 import Image from "next/image";
 import { Prisma } from "@prisma/client";
-import { deleteCabin, duplicateCabin } from "@/app/_lib/cabinActions";
+import { deleteCabin } from "@/app/_lib/cabinActions";
 import toast from "react-hot-toast";
 
 type CabinRowProps = {
   cabin: Prisma.CabinsGetPayload<object>;
-  // actionOptmisticCabins: (action: {
-  //   name: string;
-  //   id: number;
-  //   createdAt: Date;
-  //   maxCapacity: number;
-  //   regularPrice: number;
-  //   discount: number;
-  //   description: string;
-  //   image: string;
-  // }) => void;
+  handleDuplicate: (cabin: Prisma.CabinsGetPayload<object>) => void;
 };
 
-function CabinRow({ cabin }: CabinRowProps) {
+function CabinRow({ cabin, handleDuplicate }: CabinRowProps) {
   const {
     id: cabinId,
     name,
@@ -35,16 +26,6 @@ function CabinRow({ cabin }: CabinRowProps) {
     discount,
     image,
   } = cabin;
-
-  async function handleDuplicate() {
-    //   actionOptmisticCabins({ ...cabin, name: `Copy of ${name}` });
-
-    const res = await duplicateCabin(cabinId);
-
-    toast.success("Cabin successfully duplicated!");
-
-    if (res?.error) return toast.error(res.error);
-  }
 
   return (
     <Table.Row>
@@ -78,7 +59,10 @@ function CabinRow({ cabin }: CabinRowProps) {
             <Menus.Toggle id={cabinId} />
 
             <Menus.List id={cabinId}>
-              <Menus.Button icon={<HiSquare2Stack />} onClick={handleDuplicate}>
+              <Menus.Button
+                icon={<HiSquare2Stack />}
+                onClick={() => handleDuplicate(cabin)}
+              >
                 Duplicate
               </Menus.Button>
 

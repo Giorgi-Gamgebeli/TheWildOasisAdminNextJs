@@ -1,10 +1,11 @@
-import CabinTable from "./CabinTable";
+// import CabinTable from "./CabinTable";
 import Heading from "../../_components/Heading";
 import Row from "../../_components/Row";
 import AddCabin from "./AddCabin";
 import CabinTableOperations from "./CabinTableOperations";
-import { getAllCabins } from "@/app/_lib/cabinActions";
+// import { getAllCabins } from "@/app/_lib/cabinActions";
 import { Metadata } from "next";
+import CabinFetcher from "@/app/_components/CabinFetcher";
 
 export const metadata: Metadata = {
   title: "Cabins",
@@ -59,8 +60,6 @@ export const metadata: Metadata = {
 };
 
 async function Page() {
-  const cabins = await getAllCabins();
-
   return (
     <>
       <Row type="horizontal">
@@ -69,7 +68,8 @@ async function Page() {
       </Row>
 
       <Row>
-        <CabinTable cabins={cabins} />
+        {/* <CabinTable cabins={cabins} /> */}
+        <CabinFetcher />
 
         <AddCabin />
       </Row>

@@ -21,7 +21,7 @@
     "bcryptjs": "^2.4.3",
     "date-fns": "^3.6.0",
     "ip-range-check": "^0.2.0",
-    "next": "^14.2.15",
+    "next": "^14",
     "next-auth": "^5.0.0-beta.25",
     "react": "^18",
     "react-dom": "^18",

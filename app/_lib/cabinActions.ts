@@ -58,8 +58,10 @@ export async function duplicateCabin(
         name: `Copy of ${data.name}`,
       },
     });
+
     revalidatePath("/cabins");
   } catch (error) {
+    revalidatePath("/cabins");
     console.error(error);
     return { error: "Something went wrong" };
   }
@@ -118,6 +120,20 @@ export async function getAllCabins() {
     return [];
   }
 }
+
+// export const getAllCabins = cache(
+//   async () => {
+//     try {
+//       const allCabins = await prisma.cabins.findMany();
+//       return allCabins;
+//     } catch (error) {
+//       console.error(error);
+//       return [];
+//     }
+//   },
+//   undefined,
+//   { tags: ["cabins"] },
+// );
 
 export async function updateCabin(formData: FormData) {
   const formDataObj = {

@@ -5,41 +5,58 @@ import CabinRow from "./CabinRow";
 import Table from "../../_components/Table";
 import Menus from "../../_components/Menus";
 import Empty from "../../_components/Empty";
-import { useSearchParams } from "next/navigation";
+// import { useSearchParams } from "next/navigation";
 import { Prisma } from "@prisma/client";
+import { useMemo, useOptimistic, useTransition } from "react";
+import { duplicateCabin } from "@/app/_lib/cabinActions";
+import toast from "react-hot-toast";
 
-function CabinTable({
-  cabins,
-}: {
-  cabins: Prisma.CabinsGetPayload<object>[] | undefined;
-}) {
-  const searchParams = useSearchParams();
+function CabinTable({ cabins }: { cabins: Prisma.CabinsGetPayload<object>[] }) {
+  // const searchParams = useSearchParams();
+
+  // 1) FILTER
+  // const filterValue = searchParams.get("discount") || "all";
+
+  // let filteredCabins = cabins;
+  // if (filterValue === "no-discount")
+  //   filteredCabins = cabins?.filter((cabin) => cabin.discount === 0);
+  // if (filterValue === "with-discount")
+  //   filteredCabins = cabins?.filter((cabin) => cabin.discount > 0);
+
+  // 2) SORT
+  // const sortBy = searchParams.get("sortBy") || "startDate-asc";
+  // const [field, direction] = sortBy.split("-");
+  // const modifier = direction === "asc" ? 1 : -1;
+  // const sortedCabins = filteredCabins?.sort(
+  //   // @ts-expect-error: Couldn't fix error, type is first undefined then number, but it reads as any
+  //   (a, b) => (a[field] - b[field]) * modifier,
+  // );
+  const [, startTransition] = useTransition();
+
+  const [optimisticCabins, setOptimisticCabins] = useOptimistic(
+    useMemo(() => {
+      return cabins;
+    }, [cabins]),
+    (prevState, cabin: Prisma.CabinsGetPayload<object>) => [
+      ...prevState,
+      cabin,
+    ],
+  );
+
+  function handleDuplicate(cabin: Prisma.CabinsGetPayload<object>) {
+    toast.success("Cabin successfully duplicated!");
+
+    startTransition(async () => {
+      setOptimisticCabins({ ...cabin, name: `Copy of ${cabin.name}` });
+
+      const res = await duplicateCabin(cabin.id);
+
+      if (res?.error) toast.error(res.error);
+    });
+  }
 
   if (!cabins) return <Spinner />;
   if (!cabins.length) return <Empty resourceName="cabins" />;
-
-  // 1) FILTER
-  const filterValue = searchParams.get("discount") || "all";
-
-  let filteredCabins = cabins;
-  if (filterValue === "no-discount")
-    filteredCabins = cabins?.filter((cabin) => cabin.discount === 0);
-  if (filterValue === "with-discount")
-    filteredCabins = cabins?.filter((cabin) => cabin.discount > 0);
-
-  // 2) SORT
-  const sortBy = searchParams.get("sortBy") || "startDate-asc";
-  const [field, direction] = sortBy.split("-");
-  const modifier = direction === "asc" ? 1 : -1;
-  const sortedCabins = filteredCabins?.sort(
-    // @ts-expect-error: Couldn't fix error, type is first undefined then number, but it reads as any
-    (a, b) => (a[field] - b[field]) * modifier,
-  );
-
-  // const [optimisticNumbers, setOptimisticNumbers] = useOptimistic(
-  //   [1, 2, 3, 4, 5, 6, 7],
-  //   (state, newNumber: number) => [...state, newNumber],
-  // );
 
   return (
     <Menus>
@@ -53,18 +70,15 @@ function CabinTable({
           <div></div>
         </Table.Header>
 
-        {/* {optimisticNumbers.map((number, i) => (
-        <div key={i}>
-          <p>{number}</p>
-          <form action={() => setOptimisticNumbers(number + 1)}>
-            <button>click me</button>
-          </form>
-        </div>
-      ))} */}
-
         <Table.Body
-          data={sortedCabins}
-          render={(cabin) => <CabinRow cabin={cabin} key={cabin.id} />}
+          data={optimisticCabins}
+          render={(cabin) => (
+            <CabinRow
+              handleDuplicate={handleDuplicate}
+              cabin={cabin}
+              key={cabin.name}
+            />
+          )}
         />
       </Table>
     </Menus>
