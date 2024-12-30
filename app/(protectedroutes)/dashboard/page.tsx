@@ -2,7 +2,7 @@ import DashboardFilter from "./DashboardFilter";
 import DashboardLayout from "./DashboardLayout";
 import Heading from "../../_components/Heading";
 import Row from "../../_components/Row";
-import { getAllReservations, getAllStays } from "@/app/_lib/reservationActions";
+import { getAllStays } from "@/app/_lib/reservationActions";
 import { getAllCabins } from "@/app/_lib/cabinActions";
 import TodayActivity from "./TodayActivity";
 import { Metadata } from "next";
@@ -62,7 +62,6 @@ export const metadata: Metadata = {
 };
 
 async function Page() {
-  const reservations = await getAllReservations();
   const cabins = await getAllCabins();
   const stays = await getAllStays();
 
@@ -73,11 +72,7 @@ async function Page() {
         <DashboardFilter />
       </Row>
 
-      <DashboardLayout
-        stays={stays}
-        cabins={cabins}
-        reservations={reservations}
-      >
+      <DashboardLayout stays={stays} cabins={cabins}>
         <TodayActivity />
       </DashboardLayout>
     </>

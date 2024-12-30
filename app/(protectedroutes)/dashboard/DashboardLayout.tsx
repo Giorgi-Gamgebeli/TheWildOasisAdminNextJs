@@ -10,7 +10,6 @@ import Empty from "@/app/_components/Empty";
 import { getToday } from "@/app/_utils/helpers";
 
 type DashboardLayoutProps = {
-  reservations: Prisma.ReservationsGetPayload<object>[] | undefined;
   stays:
     | ({
         user: { name: string };
@@ -20,41 +19,51 @@ type DashboardLayoutProps = {
   children: React.ReactNode;
 };
 
-function DashboardLayout({
-  reservations,
-  stays,
-  cabins,
-  children,
-}: DashboardLayoutProps) {
+function DashboardLayout({ stays, cabins, children }: DashboardLayoutProps) {
   const searchParams = useSearchParams();
 
-  if (!reservations || !stays) return <Empty resourceName="data" />;
+  if (!stays) return <Empty resourceName="data" />;
 
   const lastFromURL = searchParams.get("last");
   const numDays = !lastFromURL ? 7 : +lastFromURL;
 
   const queryDate = subDays(new Date(), numDays).toISOString();
 
-  const reservationsAfterDate = reservations.filter((reservation) => {
-    const reservationDate = new Date(reservation.createdAt);
+  const { reservationsAfterDate, confirmedStays } = stays.reduce<{
+    confirmedStays: ({
+      user: { name: string };
+    } & Prisma.ReservationsGetPayload<object>)[];
+    reservationsAfterDate: Prisma.ReservationsGetPayload<object>[];
+  }>(
+    (acc, stay) => {
+      const { user: _, ...reservation } = stay;
+      const reservationDate = new Date(reservation.createdAt);
+      const stayDate = new Date(stay.startDate);
 
-    return (
-      reservationDate >= new Date(queryDate) &&
-      reservationDate <= new Date(getToday({ end: true }))
-    );
-  });
+      if (
+        reservationDate >= new Date(queryDate) &&
+        reservationDate <= new Date(getToday({ end: true }))
+      ) {
+        acc["reservationsAfterDate"] = [
+          ...acc.reservationsAfterDate,
+          reservation,
+        ];
+      }
 
-  const staysAfterDate = stays.filter((stay) => {
-    const stayDate = new Date(stay.startDate);
+      if (
+        stayDate >= new Date(queryDate) &&
+        stayDate <= new Date(getToday({ end: true })) &&
+        stay.status !== "unconfirmed"
+      ) {
+        acc["confirmedStays"] = [...acc.confirmedStays, stay];
+      }
 
-    return (
-      stayDate >= new Date(queryDate) &&
-      stayDate <= new Date(getToday({ end: true }))
-    );
-  });
-
-  const confirmedStays = staysAfterDate?.filter(
-    (stay) => stay.status !== "unconfirmed",
+      return acc;
+    },
+    {
+      reservationsAfterDate: [],
+      confirmedStays: [],
+    },
   );
 
   return (
