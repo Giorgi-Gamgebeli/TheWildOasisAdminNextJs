@@ -7,7 +7,6 @@ import Empty from "../../_components/Empty";
 import Spinner from "../../_components/Spinner";
 import Pagination from "./Pagination";
 import { Prisma } from "@prisma/client";
-import { useSearchParams } from "next/navigation";
 import { PAGE_SIZE } from "@/app/_utils/constants";
 import { useOptimistic, useTransition } from "react";
 import toast from "react-hot-toast";
@@ -26,6 +25,10 @@ type ReservationTableProps = {
       name: string;
     };
   } & Prisma.ReservationsGetPayload<object>)[];
+
+  searchParams: {
+    [key: string]: string | undefined;
+  };
 };
 
 type OptimisticUpdateTypes = {
@@ -34,24 +37,27 @@ type OptimisticUpdateTypes = {
   action: "delete" | "check_out";
 };
 
-function ReservationTable({ reservations }: ReservationTableProps) {
+function ReservationTable({
+  reservations,
+  searchParams,
+}: ReservationTableProps) {
   const [optimisticReservations, setOptimisticReservations] = useOptimistic(
     reservations,
     (prevState, { reservationId, action }: OptimisticUpdateTypes) => {
       if (action === "delete")
         return prevState.filter(
-          (prevReservation) => prevReservation.id !== reservationId,
+          (prevReservation) => prevReservation.id !== reservationId
         );
 
       if (action === "check_out")
         return prevState.map((prevReservation) =>
           prevReservation.id === reservationId
             ? { ...prevReservation, status: "checked_out" as const }
-            : prevReservation,
+            : prevReservation
         );
 
       return [...prevState];
-    },
+    }
   );
 
   const [, startTransition] = useTransition();
@@ -86,43 +92,40 @@ function ReservationTable({ reservations }: ReservationTableProps) {
     });
   }
 
-  const searchParams = useSearchParams();
+  const { status, page: pageFromUrl, sortBy } = searchParams;
 
   if (!reservations) return <Spinner />;
   if (!reservations.length) return <Empty resourceName="reservations" />;
 
   // FILTER
-  const filterValue = searchParams.get("status");
+
   const filter =
-    !filterValue || filterValue === "all"
-      ? null
-      : { field: "status", value: filterValue };
+    !status || status === "all" ? null : { field: "status", value: status };
 
   // PAGINATION
-  const pageFromUrl = searchParams?.get("page");
   const page = !pageFromUrl ? 1 : +pageFromUrl;
 
   let filteredReservations = optimisticReservations;
   // FILTER
   if (filter) {
     filteredReservations = optimisticReservations.filter(
-      (reservation) => reservation.status === filter.value,
+      (reservation) => reservation.status === filter.value
     );
   }
   // SORTING
-  const sortByRaw = searchParams.get("sortBy") || "startDate-desc";
+  const sortByRaw = sortBy || "startDate-desc";
   const [field, direction] = sortByRaw.split("-");
 
   const modifier = direction === "asc" ? 1 : -1;
   const sortedReservations = filteredReservations.sort(
     // @ts-expect-error: Couldn't fix error, type is first undefined then number, but it reads as any
-    (a, b) => (a[field] - b[field]) * modifier,
+    (a, b) => (a[field] - b[field]) * modifier
   );
   // PAGINATION
   const skip = page ? (page - 1) * PAGE_SIZE : 0;
   const take = PAGE_SIZE;
   const paginatedReservations = sortedReservations.filter(
-    (_, i) => i >= skip && i < skip + take,
+    (_, i) => i >= skip && i < skip + take
   );
 
   return (

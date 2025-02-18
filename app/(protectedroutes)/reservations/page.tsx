@@ -59,8 +59,17 @@ export const metadata: Metadata = {
   },
 };
 
-async function Page() {
-  const reservations = await getReservationsWithMoreInfo();
+export const revalidate = 0;
+
+type Params = {
+  searchParams: Promise<{ [key: string]: string | undefined }>;
+};
+
+async function Page({ searchParams }: Params) {
+  const [awaitedSearchParams, reservations] = await Promise.all([
+    searchParams,
+    getReservationsWithMoreInfo(),
+  ]);
 
   if (!reservations) return <Spinner />;
 
@@ -71,7 +80,10 @@ async function Page() {
         <ReservationTableOperations />
       </LayoutRow>
 
-      <ReservationTable reservations={reservations} />
+      <ReservationTable
+        searchParams={awaitedSearchParams}
+        reservations={reservations}
+      />
     </>
   );
 }
