@@ -2,20 +2,77 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+*,
+*::before,
+*::after {
+  transition:
+    background-color 0.3s,
+    border 0.3s;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+html {
+  ::-webkit-scrollbar {
+    width: 12px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #e5e7eb;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #9ca3af;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #6b7280;
   }
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+html.dark {
+  ::-webkit-scrollbar {
+    width: 12px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #3f3f46;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #1f2937;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #111827;
+  }
+}
+
+.FormRow:has(button) {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1.2rem;
+}
+
+.font-sono {
+  font-family: var(--fontFamily_Sono);
+}
+
+.recharts-pie-label-text {
+  font-weight: 600;
+}
+
+.recharts-cartesian-grid-horizontal line,
+.recharts-cartesian-grid-vertical line {
+  stroke: var(--color-grey-300);
+}
+
+input:focus,
+button:focus,
+textarea:focus,
+select:focus {
+  outline: 2px solid #4f46e5;
+  outline-offset: -1px;
+}
+
+.paddingRight {
+  padding-right: 12px;
 }

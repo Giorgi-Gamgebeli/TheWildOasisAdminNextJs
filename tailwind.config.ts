@@ -6,11 +6,35 @@ export default {
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
+  darkMode: "class",
   theme: {
+    screens: {
+      xss: "350px",
+
+      xs: "450px",
+
+      sm: "640px",
+
+      md: "768px",
+
+      lg: "1024px",
+
+      xl: "1280px",
+
+      "2xl": "1500px",
+    },
+
     extend: {
       colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
+        "gray-0": "#18212f",
+        backdrop: "rgba(255, 255, 255, 0.1)",
+        darkBackdrop: "rgba(0, 0, 0, 0.3)",
+      },
+      borderWidth: {
+        12: "12px",
+      },
+      fontFamily: {
+        sono: ["var(--fontFamily_Sono)"],
       },
     },
   },

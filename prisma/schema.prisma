@@ -1,0 +1,131 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// model Account {
+//   userId            String
+//   type              String
+//   provider          String
+//   providerAccountId String
+//   refresh_token     String?
+//   access_token      String?
+//   expires_at        Int?
+//   token_type        String?
+//   scope             String?
+//   id_token          String?
+//   session_state     String?
+
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
+
+//   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+//   @@id([provider, providerAccountId])
+// }
+
+// model Session {
+//   sessionToken String   @unique
+//   userId       String
+//   expires      DateTime
+//   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
+// }
+
+// model VerificationToken {
+//   identifier String
+//   token      String
+//   expires    DateTime
+
+//   @@id([identifier, token])
+// }
+
+// // Optional for WebAuthn support
+// model Authenticator {
+//   credentialID         String  @unique
+//   userId               String
+//   providerAccountId    String
+//   credentialPublicKey  String
+//   counter              Int
+//   credentialDeviceType String
+//   credentialBackedUp   Boolean
+//   transports           String?
+
+//   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+//   @@id([userId, credentialID])
+// }
+
+model User {
+  id            String         @id @default(cuid())
+  name          String
+  email         String         @unique
+  password      String?
+  role          UserRole       @default(GUEST)
+  image         String?
+  emailVerified DateTime?
+  nationalID    String?
+  nationality   String?
+  countryFlag   String?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  reservations  Reservations[]
+}
+
+model Cabins {
+  id           Int            @id @default(autoincrement())
+  createdAt    DateTime       @default(now())
+  name         String
+  maxCapacity  Int
+  regularPrice Float
+  discount     Float
+  description  String
+  image        String
+  reservations Reservations[]
+}
+
+model Reservations {
+  id           Int               @id @default(autoincrement())
+  createdAt    DateTime          @default(now())
+  startDate    DateTime
+  endDate      DateTime
+  numNights    Int?
+  numGuests    Int
+  cabinPrice   Int?
+  totalPrice   Int?
+  status       ReservationStatus
+  hasBreakfast Boolean
+  isPaid       Boolean
+  observations String?
+  extrasPrice  Int?
+  cabinId      Int
+  userId       String
+  cabin        Cabins            @relation(fields: [cabinId], references: [id], onDelete: Cascade)
+  user         User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Settings {
+  id                       Int      @id @default(autoincrement())
+  createdAt                DateTime @default(now())
+  minimumReservationLength Int
+  maxReservationLength     Int
+  maxGuestsPerReservation  Int
+  breakFastPrice           Int
+}
+
+enum UserRole {
+  ADMIN
+  GUEST
+}
+
+enum ReservationStatus {
+  checked_in
+  checked_out
+  unconfirmed
+}
