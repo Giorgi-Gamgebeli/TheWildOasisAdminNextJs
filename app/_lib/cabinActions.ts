@@ -82,11 +82,21 @@ export async function createCabin(formData: FormData) {
 
     if (error) throw new Error(error.message);
 
+    const highestId = await prisma.cabins.findFirst({
+      orderBy: {
+        id: "desc",
+      },
+      select: {
+        id: true,
+      },
+    });
+
     await prisma.cabins.create({
       data: {
         ...data,
         name: name,
         image: `${bucketUrl}${bucketData.path}`,
+        ...(highestId && { id: highestId.id + 1 }),
       },
     });
   } catch (error) {

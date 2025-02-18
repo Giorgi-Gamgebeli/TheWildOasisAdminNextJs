@@ -43,7 +43,7 @@ function ReservationDetailClientButtons({
           <ConfirmDelete
             resourceName="reservation"
             onConfirm={async () => {
-              redirectFunction(
+              await redirectFunction(
                 async () => {
                   toast.success("Reservation succesfully deleted");
 
@@ -51,7 +51,7 @@ function ReservationDetailClientButtons({
 
                   if (res?.error) return toast.error(res.error);
                 },
-                { redirectTo: "/reservations" },
+                { redirectTo: "/reservations" }
               );
             }}
           />

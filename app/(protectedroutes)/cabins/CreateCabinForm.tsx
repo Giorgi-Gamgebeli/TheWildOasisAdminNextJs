@@ -60,6 +60,7 @@ function CreateCabinForm({ onCloseModal, handleCreate }: CreateCabinFormProps) {
         if (value instanceof FileList) formData.append(key, image);
         formData.append(key, value.toString());
       }
+      console.log(values);
 
       const res = await createCabin(formData);
 
