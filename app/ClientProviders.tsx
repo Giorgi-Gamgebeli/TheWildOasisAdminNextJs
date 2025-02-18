@@ -11,8 +11,8 @@ function ClientProviders({ children }: { children: React.ReactNode }) {
   return (
     <>
       <AppProgressBar
-        height="2px"
-        color="#4f46e5"
+        // height="2px"
+        // color="#4f46e5"
         options={{ showSpinner: false }}
       />
 
