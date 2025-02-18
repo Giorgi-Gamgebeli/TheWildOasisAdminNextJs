@@ -82,10 +82,10 @@ function CheckinReservation({
 
         if (res?.error) {
           console.log(res.error);
-          toast.error(res.error);
+          return toast.error(res.error);
         }
       },
-      { redirectTo: "/dashboard" },
+      { redirectTo: "/dashboard" }
     );
   }
 
@@ -128,9 +128,9 @@ function CheckinReservation({
           {!addBreakfast
             ? formatCurrency(totalPrice || 0)
             : `${formatCurrency(
-                (totalPrice || 0) + optionalBreakfastPrice,
+                (totalPrice || 0) + optionalBreakfastPrice
               )} (${formatCurrency(totalPrice || 0)} + ${formatCurrency(
-                optionalBreakfastPrice,
+                optionalBreakfastPrice
               )})`}
         </Checkbox>
       </div>

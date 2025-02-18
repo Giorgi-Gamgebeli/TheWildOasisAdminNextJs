@@ -3,7 +3,7 @@
 import { startProgress, stopProgress } from "next-nprogress-bar";
 import { usePathname, useRouter } from "next/navigation";
 
-type PassedInFunction = () => void;
+type PassedInFunction = () => Promise<string | undefined>;
 
 type RedirectFunctionSettings = {
   redirectTo: string;
@@ -16,11 +16,11 @@ function useRedirectProgressBar() {
 
   const redirectFunction = async (
     passedInfunction: PassedInFunction,
-    { redirectTo, scroll = true }: RedirectFunctionSettings,
+    { redirectTo, scroll = true }: RedirectFunctionSettings
   ) => {
     startProgress();
 
-    passedInfunction();
+    await passedInfunction();
 
     router.push(redirectTo, { scroll });
 
