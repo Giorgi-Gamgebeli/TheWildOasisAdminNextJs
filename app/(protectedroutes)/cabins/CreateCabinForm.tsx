@@ -63,7 +63,16 @@ function CreateCabinForm({ onCloseModal, handleCreate }: CreateCabinFormProps) {
 
       const res = await createCabin(formData);
 
-      if (res?.error) toast.error(res.error);
+      // if (res?.error) {
+      //   toast.error(res.error);
+      //   console.error(res.error);
+      // }
+      if (res?.error) {
+        const errorMessage =
+          typeof res.error === "string" ? res.error : "Unknown error occured";
+        toast.error(errorMessage);
+        console.error(errorMessage);
+      }
     });
   }
 
