@@ -57,6 +57,6 @@ export default middleware((req: NextRequest & { auth: Session | null }) => {
 
 export const config = {
   matcher: [
-    "/((?!_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt|sitemap/sitemap.xml).*)",
+    "/((?!_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt|googlec5121ff754960516.html|sitemap/sitemap.xml).*)",
   ],
 };
