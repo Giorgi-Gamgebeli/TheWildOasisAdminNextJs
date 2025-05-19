@@ -19,10 +19,7 @@ export async function updateUser(formData: FormData) {
 
   const result = UpdatedUserSchema.safeParse(formDataObj);
 
-  if (!result.success)
-    return {
-      zodErrors: result.error.flatten().fieldErrors,
-    };
+  if (!result.success) throw new Error("Validation failed on server");
 
   const { password, fullName, userId, avatar } = result.data;
 
