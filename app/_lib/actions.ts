@@ -35,10 +35,7 @@ export async function login(formData: FormData) {
 export async function signup(values: z.infer<typeof SignupSchema>) {
   const result = SignupSchema.safeParse(values);
 
-  if (!result.success)
-    return {
-      zodErrors: result.error.flatten().fieldErrors,
-    };
+  if (!result.success) throw new Error("Validation failed on server!");
 
   const { email, password, fullName } = result.data;
 

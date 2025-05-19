@@ -141,10 +141,7 @@ export async function updateCabin(formData: FormData) {
 
   const result = UpdateCabinSchema.safeParse(formDataObj);
 
-  if (!result.success)
-    return {
-      zodErrors: result.error.flatten().fieldErrors,
-    };
+  if (!result.success) throw new Error("Validation failed on server!");
 
   const { image, cabinId, name, ...data } = result.data;
   // const fileBuffer =

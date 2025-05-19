@@ -9,12 +9,10 @@ import { login } from "../_lib/actions";
 import toast from "react-hot-toast";
 
 function LoginForm() {
-
   async function clientAction(formData: FormData) {
     const res = await login(formData);
 
     if (res?.error) return toast.error(res.error);
-
   }
 
   return (
