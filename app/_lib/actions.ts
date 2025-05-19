@@ -1,8 +1,6 @@
 "use server";
 
 import { auth, signIn } from "@/auth";
-import { AuthError } from "next-auth";
-import { isRedirectError } from "next/dist/client/components/redirect-error";
 import { LoginSchema, SignupSchema } from "../_schemas/authSchemas";
 import prisma from "./db";
 import { cabins } from "../_data/data-cabins";
