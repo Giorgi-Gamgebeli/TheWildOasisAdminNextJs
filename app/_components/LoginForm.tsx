@@ -9,13 +9,12 @@ import { login } from "../_lib/actions";
 import toast from "react-hot-toast";
 
 function LoginForm() {
+
   async function clientAction(formData: FormData) {
     const res = await login(formData);
 
     if (res?.error) return toast.error(res.error);
 
-    // To redirect user to dashboard with middleware after they are logged in, otherwise session is null until refresh
-    window.location.reload();
   }
 
   return (

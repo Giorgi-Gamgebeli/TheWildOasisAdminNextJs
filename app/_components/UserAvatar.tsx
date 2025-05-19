@@ -4,9 +4,14 @@ import Image from "next/image";
 import defaultAvatar from "@/public/default-user.jpg";
 import { useSession } from "next-auth/react";
 import SpinnerMini from "./SpinnerMini";
+import { useEffect } from "react";
 
 function UserAvatar() {
-  const { data: session } = useSession();
+  const { data: session, update } = useSession();
+
+  useEffect(() => {
+    update();
+  }, []);
 
   return (
     <div className="flex h-[3.6rem] items-center gap-[1.2rem] pr-6 text-[1.4rem] font-medium">

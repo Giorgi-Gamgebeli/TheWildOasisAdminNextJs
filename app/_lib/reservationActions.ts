@@ -6,7 +6,7 @@ import {
   revalidateTag,
   unstable_cache as cache,
 } from "next/cache";
-import { getToday } from "../_utils/helpers";
+import { getToday, handleErrorsOnServer } from "../_utils/helpers";
 import { z } from "zod";
 import { ReservationsSchemaDatabase } from "../_schemas/databaseSchemas";
 import { UpdateCheckinSchema } from "../_schemas/reservationSchemas";
@@ -176,8 +176,7 @@ export async function updateCheckout(
       },
     });
   } catch (error) {
-    console.error(error);
-    return { error: "There was an error while checking out" };
+    return handleErrorsOnServer(error);
   } finally {
     revalidatePath("/dashboard");
     revalidateTag("reservations");
@@ -202,9 +201,7 @@ export async function updateCheckin(data: z.infer<typeof UpdateCheckinSchema>) {
       data: { hasBreakfast, extrasPrice, totalPrice, status: "checked_in" },
     });
   } catch (error) {
-    console.error(error);
-
-    return { error: "There was an error while checking in" };
+    return handleErrorsOnServer(error);
   } finally {
     revalidatePath("/dashboard");
     revalidatePath("/reservations");
@@ -230,8 +227,7 @@ export async function deleteReservation(
       },
     });
   } catch (error) {
-    console.error(error);
-    return { error: "Something went wrong" };
+    return handleErrorsOnServer(error);
   } finally {
     revalidatePath("/reservations");
   }

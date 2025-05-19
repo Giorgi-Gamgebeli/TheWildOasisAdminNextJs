@@ -5,6 +5,8 @@ import { guestUsers } from "../_data/data-guests";
 import { reservations } from "../_data/data-reservations";
 import { z } from "zod";
 import { UserSchemaDatabase } from "../_schemas/databaseSchemas";
+import { isRedirectError } from "next/dist/client/components/redirect-error";
+import { AuthError } from "next-auth";
 
 // We want to make this function work for both Date objects and strings (which come from Supabase)
 export const subtractDates = (dateStr1: Date, dateStr2: Date) =>
@@ -93,4 +95,26 @@ export function fixedReservations(
     .filter((reservation) => reservation !== null);
 
   return finalReservations;
+}
+
+export function handleErrorsOnServer(error: unknown) {
+  console.error(error);
+
+  let message: string;
+
+  if (isRedirectError(error)) {
+    throw error;
+  } else if (error instanceof AuthError && error.type === "CredentialsSignin") {
+    message = "Invalid credentials";
+  } else if (error instanceof Error) {
+    message = error.message;
+  } else if (error && typeof error === "object" && "message" in error) {
+    message = String(error.message);
+  } else if (typeof error === "string") {
+    message = error;
+  } else {
+    message = "Something went wrong!";
+  }
+
+  return { error: message };
 }

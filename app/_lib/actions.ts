@@ -7,9 +7,10 @@ import { LoginSchema, SignupSchema } from "../_schemas/authSchemas";
 import prisma from "./db";
 import { cabins } from "../_data/data-cabins";
 import { revalidatePath } from "next/cache";
-import { fixedReservations } from "../_utils/helpers";
+import { fixedReservations, handleErrorsOnServer } from "../_utils/helpers";
 import { hash } from "bcryptjs";
 import { z } from "zod";
+import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 
 export async function login(formData: FormData) {
   const formDataObj = {
@@ -26,22 +27,10 @@ export async function login(formData: FormData) {
     await signIn("credentials", {
       email,
       password,
-      redirect: false,
+      redirectTo: DEFAULT_LOGIN_REDIRECT,
     });
   } catch (error) {
-    if (isRedirectError(error)) throw error;
-
-    if (error instanceof AuthError) {
-      switch (error.type) {
-        case "CredentialsSignin":
-          return { error: "Invalid credentials" };
-        default:
-          return { error: "Something went wrong!" };
-      }
-    }
-
-    console.error(error);
-    return { error: "Something went REALLY wrong!" };
+    return handleErrorsOnServer(error);
   }
 }
 
@@ -81,8 +70,7 @@ export async function signup(values: z.infer<typeof SignupSchema>) {
       },
     });
   } catch (error) {
-    console.error(error);
-    return { error: "Something went wrong" };
+    return handleErrorsOnServer(error);
   }
 }
 

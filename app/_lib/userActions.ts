@@ -6,6 +6,7 @@ import { hash } from "bcryptjs";
 import supabase, { bucketUrl } from "./supabase";
 import { createId } from "@paralleldrive/cuid2";
 import { auth } from "@/auth";
+import { handleErrorsOnServer } from "../_utils/helpers";
 
 export async function updateUser(formData: FormData) {
   const formDataObj = {
@@ -72,7 +73,6 @@ export async function updateUser(formData: FormData) {
       },
     });
   } catch (error) {
-    console.error(error);
-    return { error: "Something went wrong" };
+    return handleErrorsOnServer(error);
   }
 }

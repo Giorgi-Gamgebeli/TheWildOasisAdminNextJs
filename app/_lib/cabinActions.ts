@@ -8,9 +8,10 @@ import { createId } from "@paralleldrive/cuid2";
 import { z } from "zod";
 import { CabinsSchemaDatabase } from "../_schemas/databaseSchemas";
 import { auth } from "@/auth";
+import { handleErrorsOnServer } from "../_utils/helpers";
 
 export async function duplicateCabin(
-  cabinId: z.infer<typeof CabinsSchemaDatabase.shape.id>
+  cabinId: z.infer<typeof CabinsSchemaDatabase.shape.id>,
 ) {
   const result = CabinsSchemaDatabase.shape.id.safeParse(cabinId);
 
@@ -46,8 +47,7 @@ export async function duplicateCabin(
       },
     });
   } catch (error) {
-    console.error(error);
-    return { error: "Something went wrong" };
+    return handleErrorsOnServer(error);
   } finally {
     revalidatePath("/cabins");
   }
@@ -100,10 +100,7 @@ export async function createCabin(formData: FormData) {
       },
     });
   } catch (error) {
-    console.error(error);
-    if (typeof error === "object" && error !== null && "message" in error) {
-      return { error: error.message };
-    }
+    return handleErrorsOnServer(error);
   } finally {
     revalidatePath("/cabins");
   }
@@ -180,15 +177,14 @@ export async function updateCabin(formData: FormData) {
       },
     });
   } catch (error) {
-    console.error(error);
-    return { error: "Something went wrong" };
+    return handleErrorsOnServer(error);
   } finally {
     revalidatePath("/cabins");
   }
 }
 
 export async function deleteCabin(
-  id: z.infer<typeof CabinsSchemaDatabase.shape.id>
+  id: z.infer<typeof CabinsSchemaDatabase.shape.id>,
 ) {
   const result = CabinsSchemaDatabase.shape.id.safeParse(id);
 
@@ -204,8 +200,7 @@ export async function deleteCabin(
       where: { id: parsedId },
     });
   } catch (error) {
-    console.error(error);
-    return { error: "Something went wrong" };
+    return handleErrorsOnServer(error);
   } finally {
     revalidatePath("/cabins");
   }

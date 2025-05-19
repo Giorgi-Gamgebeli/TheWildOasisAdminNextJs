@@ -14,6 +14,11 @@ const settings: Prisma.SettingsCreateInput = {
 };
 
 async function main() {
+  await prisma.user.deleteMany();
+  await prisma.cabins.deleteMany();
+  await prisma.reservations.deleteMany();
+  await prisma.settings.deleteMany();
+
   const password = await hash("12345678", 12);
   await prisma.user.upsert({
     where: { email: "adminaccount@gmail.com" },

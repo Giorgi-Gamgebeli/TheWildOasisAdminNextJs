@@ -5,6 +5,7 @@ import prisma from "./db";
 import { UpdateSettingsSchema } from "../_schemas/settingsSchema";
 import { z } from "zod";
 import { auth } from "@/auth";
+import { handleErrorsOnServer } from "../_utils/helpers";
 
 export async function getSettings() {
   try {
@@ -40,7 +41,6 @@ export async function updateSettings(
 
     revalidatePath("/settings");
   } catch (error) {
-    console.error(error);
-    return { error: "Something went wrong" };
+    return handleErrorsOnServer(error);
   }
 }
