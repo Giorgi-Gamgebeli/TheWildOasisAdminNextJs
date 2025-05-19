@@ -17,7 +17,17 @@ async function main() {
   await prisma.user.deleteMany();
   await prisma.cabins.deleteMany();
   await prisma.reservations.deleteMany();
-  await prisma.settings.deleteMany();
+  await prisma.settings.update({
+    where: {
+      id: 1,
+    },
+    data: {
+      maxReservationLength: 90,
+      minimumReservationLength: 6,
+      maxGuestsPerReservation: 5,
+      breakFastPrice: 15,
+    },
+  });
 
   const password = await hash("12345678", 12);
   await prisma.user.upsert({

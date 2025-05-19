@@ -12,6 +12,7 @@ type InputProps<T extends FieldValues> = {
   defaultValue?: string | number;
   hidden?: boolean;
   onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
+  onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
   register?: UseFormRegister<T>;
 };
 
@@ -23,6 +24,7 @@ function Input<T extends FieldValues>({
   placeholder,
   defaultValue,
   hidden,
+  onKeyDown,
   onBlur,
   register,
 }: InputProps<T>) {
@@ -33,6 +35,7 @@ function Input<T extends FieldValues>({
       type={type}
       placeholder={placeholder}
       id={id}
+      onKeyDown={onKeyDown}
       defaultValue={defaultValue}
       autoComplete={autoComplete}
       hidden={hidden}

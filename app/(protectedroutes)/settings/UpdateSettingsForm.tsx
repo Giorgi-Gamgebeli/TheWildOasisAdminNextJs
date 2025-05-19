@@ -42,6 +42,9 @@ function UpdateSettingsForm({ settings }: UpdateSettingsFormProps) {
           onBlur={(e) =>
             handleBlur(+e.target.value, "minimumReservationLength")
           }
+          onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) =>
+            e.key === "Enter" && (e.target as HTMLInputElement).blur()
+          }
         />
       </FormRow>
       <FormRow label="Maximum nights/reservation">
@@ -50,6 +53,9 @@ function UpdateSettingsForm({ settings }: UpdateSettingsFormProps) {
           id="max-nights"
           defaultValue={maxReservationLength}
           onBlur={(e) => handleBlur(+e.target.value, "maxReservationLength")}
+          onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) =>
+            e.key === "Enter" && (e.target as HTMLInputElement).blur()
+          }
         />
       </FormRow>
       <FormRow label="Maximum guests/reservation">
@@ -58,6 +64,9 @@ function UpdateSettingsForm({ settings }: UpdateSettingsFormProps) {
           id="max-guests"
           defaultValue={maxGuestsPerReservation}
           onBlur={(e) => handleBlur(+e.target.value, "maxGuestsPerReservation")}
+          onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) =>
+            e.key === "Enter" && (e.target as HTMLInputElement).blur()
+          }
         />
       </FormRow>
       <FormRow label="Breakfast price">
@@ -66,6 +75,9 @@ function UpdateSettingsForm({ settings }: UpdateSettingsFormProps) {
           id="breakfast-price"
           defaultValue={breakFastPrice}
           onBlur={(e) => handleBlur(+e.target.value, "breakFastPrice")}
+          onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) =>
+            e.key === "Enter" && (e.target as HTMLInputElement).blur()
+          }
         />
       </FormRow>
     </Form>

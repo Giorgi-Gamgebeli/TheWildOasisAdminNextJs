@@ -63,7 +63,7 @@ datasource db {
 // }
 
 model User {
-  id            String         @id @default(cuid())
+  id            String         @id @unique @default(cuid())
   name          String
   email         String         @unique
   password      String?
@@ -79,7 +79,7 @@ model User {
 }
 
 model Cabins {
-  id           Int            @id @default(autoincrement())
+  id           Int            @id @unique @default(autoincrement())
   createdAt    DateTime       @default(now())
   name         String
   maxCapacity  Int
@@ -91,7 +91,7 @@ model Cabins {
 }
 
 model Reservations {
-  id           Int               @id @default(autoincrement())
+  id           Int               @id @unique @default(autoincrement())
   createdAt    DateTime          @default(now())
   startDate    DateTime
   endDate      DateTime
@@ -111,7 +111,7 @@ model Reservations {
 }
 
 model Settings {
-  id                       Int      @id @default(autoincrement())
+  id                       Int      @id @unique @default(autoincrement())
   createdAt                DateTime @default(now())
   minimumReservationLength Int
   maxReservationLength     Int

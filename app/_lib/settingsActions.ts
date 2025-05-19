@@ -9,9 +9,7 @@ import { handleErrorsOnServer } from "../_utils/helpers";
 
 export async function getSettings() {
   try {
-    const settings = await prisma.settings.findUnique({
-      where: { id: 1 },
-    });
+    const settings = await prisma.settings.findFirst();
 
     return settings;
   } catch (error) {
