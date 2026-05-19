@@ -35,7 +35,14 @@ function UpdateUserDataForm() {
   const [image, setImage] = useState<File>(new File([], ""));
   const ref = useRef<HTMLFormElement | null>(null);
 
+  const isDemoUser = data?.user?.email === "adminaccount@gmail.com";
+
   async function onSubmit(values: z.infer<typeof UpdatedUserSchemaClient>) {
+    if (isDemoUser) {
+      toast.error("You cannot modify the main user account.");
+      return;
+    }
+
     startTransition(async () => {
       const formData = new FormData();
       for (const [key, value] of Object.entries(values)) {
@@ -45,7 +52,10 @@ function UpdateUserDataForm() {
 
       const res = await updateUser(formData);
 
-      if (res?.error) toast.error(res.error);
+      if (res?.error) {
+        toast.error(res.error);
+        return;
+      }
 
       toast.success("Account successfully updated!");
       update();
@@ -59,6 +69,13 @@ function UpdateUserDataForm() {
 
   return (
     <Form onSubmit={handleSubmit(onSubmit)} useRef={ref}>
+      {isDemoUser && (
+        <div className="mb-4 rounded-md border border-amber-200 bg-amber-50 p-4 text-[1.4rem] text-amber-800 dark:border-amber-900/30 dark:bg-amber-950/20 dark:text-amber-400">
+          ⚠️ The main user account (demo account) is read-only. Modifying its
+          details is disabled.
+        </div>
+      )}
+
       <FormRow label="Email address">
         <Input defaultValue={data?.user.email} disabled />
       </FormRow>
@@ -69,7 +86,7 @@ function UpdateUserDataForm() {
           id="fullName"
           register={register}
           defaultValue={data?.user.name}
-          disabled={isPending}
+          disabled={isPending || isDemoUser}
         />
       </FormRow>
 
@@ -82,7 +99,7 @@ function UpdateUserDataForm() {
           id="password"
           autoComplete="current-password"
           register={register}
-          disabled={isPending}
+          disabled={isPending || isDemoUser}
         />
       </FormRow>
 
@@ -95,7 +112,7 @@ function UpdateUserDataForm() {
           autoComplete="new-password"
           id="passwordConfirm"
           register={register}
-          disabled={isPending}
+          disabled={isPending || isDemoUser}
         />
       </FormRow>
 
@@ -104,7 +121,7 @@ function UpdateUserDataForm() {
           id="avatar"
           accept="image/*"
           register={register}
-          disabled={isPending}
+          disabled={isPending || isDemoUser}
           onChange={(e) => setImage(e?.target?.files?.[0] || new File([], ""))}
         />
       </FormRow>
@@ -121,11 +138,11 @@ function UpdateUserDataForm() {
           ariaLabel="Reset"
           type="reset"
           variation="secondary"
-          disabled={isPending}
+          disabled={isPending || isDemoUser}
         >
           Cancel
         </Button>
-        <Button ariaLabel="Update account" disabled={isPending}>
+        <Button ariaLabel="Update account" disabled={isPending || isDemoUser}>
           Update account
         </Button>
       </FormRow>

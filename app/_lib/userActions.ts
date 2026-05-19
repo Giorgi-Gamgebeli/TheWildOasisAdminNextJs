@@ -29,11 +29,6 @@ export async function updateUser(formData: FormData) {
 
     if (session.user.id !== userId) throw new Error("No permission!");
 
-    // const fileBuffer =
-    //   avatar?.size !== 0 && avatar
-    //     ? Buffer.from(await avatar.arrayBuffer())
-    //     : null;
-
     let imageUrl = null;
 
     if (avatar.size > 0) {
@@ -53,10 +48,15 @@ export async function updateUser(formData: FormData) {
       },
       select: {
         password: true,
+        email: true,
       },
     });
 
     if (!user) throw new Error("Account not registered");
+
+    if (user.email === "adminaccount@gmail.com") {
+      throw new Error("You cannot modify the main user account.");
+    }
 
     const hashedPassword =
       password === "" ? user?.password : await hash(password, 12);
