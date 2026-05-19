@@ -179,7 +179,7 @@ export async function updateCheckout(
     return handleErrorsOnServer(error);
   } finally {
     revalidatePath("/dashboard");
-    revalidateTag("reservations");
+    revalidateTag("reservations", "max");
   }
 }
 
